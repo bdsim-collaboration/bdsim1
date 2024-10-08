@@ -91,7 +91,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 %token <str> STR VARIABLE
 %token <ival> MARKER ELEMENT DRIFT RF RBEND SBEND QUADRUPOLE SEXTUPOLE OCTUPOLE
 %token <ival> DECAPOLE MULTIPOLE SCREEN AWAKESCREEN AWAKESPECTROMETER THINMULT
-%token <ival> SOLENOID RCOL JCOL ECOL LINE LASER TRANSFORM3D MUONSPOILER MUSPOILER
+%token <ival> SOLENOID RCOL JCOL ECOL BMCOL LINE LASER TRANSFORM3D MUONSPOILER MUSPOILER
 %token <ival> SHIELD DEGRADER GAP CRYSTALCOL WIRESCANNER
 %token <ival> VKICKER HKICKER KICKER TKICKER THINRMATRIX PARALLELTRANSPORTER
 %token <ival> RMATRIX UNDULATOR USERCOMPONENT DUMP CT TARGET RFX RFY
@@ -383,6 +383,7 @@ component : DRIFT       {$$=static_cast<int>(ElementType::_DRIFT);}
           | ECOL        {$$=static_cast<int>(ElementType::_ECOL);}
           | JCOL        {$$=static_cast<int>(ElementType::_JCOL);}
           | RCOL        {$$=static_cast<int>(ElementType::_RCOL);}
+          | BMCOL       {$$=static_cast<int>(ElementType::_BMCOL);}
           | MUONSPOILER {$$=static_cast<int>(ElementType::_MUONSPOILER);}
           | MUSPOILER   {$$=static_cast<int>(ElementType::_MUONSPOILER);}
           | SHIELD      {$$=static_cast<int>(ElementType::_SHIELD);}

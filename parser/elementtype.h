@@ -39,7 +39,7 @@ namespace GMAD
     _SOLENOID    = 10,
     _LINE        = 11,
     _REV_LINE    = -11, //for line inversion in sublines
-    // = 12,
+    _BMCOL       = 12,
     _ECOL        = 13,
     _RCOL        = 14,
     _LASER       = 15,

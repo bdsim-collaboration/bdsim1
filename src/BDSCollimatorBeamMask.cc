@@ -21,6 +21,8 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "globals.hh"
 #include "G4Box.hh"
 #include "G4Trd.hh"
+#include "G4UnionSolid.hh"
+
 
 BDSCollimatorBeamMask::BDSCollimatorBeamMask(const G4String& nameIn,
                                                    G4double    lengthIn,
@@ -69,16 +71,31 @@ void BDSCollimatorBeamMask::BuildInnerCollimator()
     }
   else
     {
-      innerSolid  = new G4Box(name + "_inner_solid",    // name
+      G4Box* inner1 = new G4Box(name + "_inner_solid_1",    // name
                               xAperture,                // x half width
                               yAperture,                // y half width
                               chordLength);             // z half length
       // z half length long for unambiguous subtraction
 
-      vacuumSolid = new G4Box(name + "_vacuum_solid",   // name
+      G4Box* inner2 = new G4Box(name + "_inner_solid_2",    // name
+                              yAperture,                // x half width
+                              xAperture,                // y half width
+                              chordLength);             // z half length
+      // z half length long for unambiguous subtraction
+
+      innerSolid = new G4UnionSolid(name + "_inner_solid_union", inner1, inner2);
+
+      G4Box* vacuum1 = new G4Box(name + "_vacuum_solid",   // name
                               xAperture - lengthSafety, // x half width
                               yAperture - lengthSafety, // y half width
                               chordLength*0.5);         // z half length
+
+      G4Box* vacuum2 = new G4Box(name + "_vacuum_solid",   // name
+                              yAperture - lengthSafety, // x half width
+                              xAperture - lengthSafety, // y half width
+                              chordLength*0.5);         // z half length
+
+      vacuumSolid = new G4UnionSolid(name + "_vacuum_solid_union", vacuum1, vacuum2);
     }
     
   RegisterSolid(innerSolid);
