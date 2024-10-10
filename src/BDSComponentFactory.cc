@@ -467,6 +467,7 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateComponent(Element const* ele
 	case ElementType::_ECOL:
 	case ElementType::_RCOL:
 	case ElementType::_JCOL:
+    case ElementType::_BMCOL:
 	  {
 	    if (BDSGlobalConstants::Instance()->CollimatorsAreInfiniteAbsorbers())
 	      {component->SetMinimumKineticEnergy(std::numeric_limits<double>::max());}
@@ -1471,8 +1472,11 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateBeamMaskCollimator()
                                       PrepareVacuumMaterial(element),
                                       element->xsize*CLHEP::m,
                                       element->ysize*CLHEP::m,
-                                      element->xsizeOut*CLHEP::m,
-                                      element->ysizeOut*CLHEP::m,
+                                      element->xsize2*CLHEP::m,
+                                      element->ysize2*CLHEP::m,
+                                      element->offsetX2*CLHEP::m,
+                                      element->offsetY2*CLHEP::m,
+                                      element->tilt2*CLHEP::rad,
                                       PrepareColour(element),
                                       circularOuter);
 }

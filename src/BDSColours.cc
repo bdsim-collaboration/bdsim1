@@ -93,6 +93,7 @@ BDSColours::BDSColours()
   colours["jcol"]             = colours["collimator"];
   colours["rcol"]             = colours["collimator"];
   colours["jcol"]             = colours["collimator"];
+  colours["bmcol"]            = colours["collimator"];
   colours["target"]           = colours["collimator"];
   colours["muonspoiler"]      = new G4Colour(0,     0.807, 0.819); // "light blue" / tab blue
   colours["vkicker"]          = new G4Colour(0.73,  0.33,  0.83);  // blue

@@ -26,6 +26,8 @@ class G4Material;
 
 /**
  * @brief A class for a beam mask collimator.
+ *
+ * @author Marin Deniaud based on BDSCollimatorRectangular
  */
 
 class BDSCollimatorBeamMask: public BDSCollimator
@@ -36,15 +38,25 @@ public:
 			   G4double    horizontalWidth,
 			   G4Material* collimatorMaterial,
 			   G4Material* vacuumMaterial,
-			   G4double    xAperture    = 0,
-			   G4double    yAperture    = 0,
-			   G4double    xOutAperture = 0,
-			   G4double    yOutAperture = 0,
-			   G4Colour*   colour       = nullptr,
-			   G4bool      circularOuter = false);
+			   G4double    xApertureIn    = 0,
+			   G4double    yApertureIn    = 0,
+			   G4double    xApertureSlitIn = 0,
+			   G4double    yApertureSlitIn = 0,
+               G4double    xOffsetSlitIn = 0,
+               G4double    yOffsetSlitIn = 0,
+               G4double    tiltSlitIn = 0,
+			   G4Colour*   colourIn       = nullptr,
+			   G4bool      circularOuterIn = false);
   virtual ~BDSCollimatorBeamMask(){;};
 
   virtual void BuildInnerCollimator();
+
+protected:
+  G4double xApertureSlit;
+  G4double yApertureSlit;
+  G4double xOffsetSlit;
+  G4double yOffsetSlit;
+  G4double tiltSlit;
 
 private:
   /// Private default constructor to force the use of the supplied one.

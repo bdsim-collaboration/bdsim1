@@ -31,72 +31,54 @@ BDSCollimatorBeamMask::BDSCollimatorBeamMask(const G4String& nameIn,
                                                    G4Material* vacuumMaterialIn,
                                                    G4double    xApertureIn,
                                                    G4double    yApertureIn,
-                                                   G4double    xApertureOutIn,
-                                                   G4double    yApertureOutIn,
+                                                   G4double    xApertureSlitIn,
+                                                   G4double    yApertureSlitIn,
+                                                   G4double    xOffsetSlitIn,
+                                                   G4double    yOffsetSlitIn,
+                                                   G4double    tiltSlitIn,
                                                    G4Colour*   colourIn,
                                                    G4bool      circularOuterIn):
+  xApertureSlit(xApertureSlitIn),
+  yApertureSlit(yApertureSlitIn),
+  xOffsetSlit(xOffsetSlitIn),
+  yOffsetSlit(yOffsetSlitIn),
+  tiltSlit(tiltSlitIn),
   BDSCollimator(nameIn, lengthIn, horizontalWidthIn, "bmcol",
                 collimatorMaterialIn, vacuumMaterialIn, xApertureIn,
-                yApertureIn, xApertureOutIn, yApertureOutIn, colourIn, circularOuterIn)
+                yApertureIn, 0, 0, colourIn, circularOuterIn)
 {;}
 
 void BDSCollimatorBeamMask::BuildInnerCollimator()
 {
-  if (tapered)
-    {
-      // Make subtracted volume longer than the solid volume by extrapolating
-      // linear gradient along 1% of the length of the element. May break down
-      // in the case of extreme gradients for really short collimators.
-      G4double xGradient = (xApertureOut - xAperture) / chordLength;
-      G4double yGradient = (yApertureOut - yAperture) / chordLength;
-      
-      G4double deltam = 0.01 * chordLength; // +ve z here
-      G4double deltax = xGradient * deltam;
-      G4double deltay = yGradient * deltam;
+  G4Box* inner1 = new G4Box(name + "_inner_solid_1",    // name
+                            xAperture,                // x half width
+                            yAperture,                // y half width
+                            chordLength);             // z half length
+  // z half length long for unambiguous subtraction
 
-      // sign in front of deltax -> +ve for +ve z from centre, -ve for -ve x from centre
-      innerSolid  = new G4Trd(name + "_inner_solid",             // name
-                              xAperture - deltax,                // X entrance half length
-                              xApertureOut + deltax,             // X exit half length
-                              yAperture - deltay,                // Y entrance half length
-                              yApertureOut + deltay,             // Y exit half length
-                              (chordLength + 2*deltam) * 0.5);   // Z half length
-    
-      vacuumSolid = new G4Trd(name + "_vacuum_solid",               // name
-                              xAperture - lengthSafetyLarge,        // X entrance half length
-                              xApertureOut - lengthSafetyLarge,     // X exit half length
-                              yAperture - lengthSafetyLarge,        // Y entrance half length
-                              yApertureOut - lengthSafetyLarge,     // Y exit half length
-                              chordLength*0.5 - lengthSafetyLarge); // Z half length
-    }
-  else
-    {
-      G4Box* inner1 = new G4Box(name + "_inner_solid_1",    // name
-                              xAperture,                // x half width
-                              yAperture,                // y half width
-                              chordLength);             // z half length
-      // z half length long for unambiguous subtraction
+  G4Box* inner2 = new G4Box(name + "_inner_solid_2",    // name
+                            xApertureSlit,                // x half width
+                            yApertureSlit,                // y half width
+                            chordLength);             // z half length
+  // z half length long for unambiguous subtraction
 
-      G4Box* inner2 = new G4Box(name + "_inner_solid_2",    // name
-                              yAperture,                // x half width
-                              xAperture,                // y half width
-                              chordLength);             // z half length
-      // z half length long for unambiguous subtraction
+  G4ThreeVector Trans(xOffsetSlit, yOffsetSlit, 0);
+  G4RotationMatrix* Rot = new G4RotationMatrix;
+  Rot->rotateZ(tiltSlit);
 
-      innerSolid = new G4UnionSolid(name + "_inner_solid_union", inner1, inner2);
+  innerSolid = new G4UnionSolid(name + "_inner_solid_union", inner1, inner2, Rot, Trans);
 
-      G4Box* vacuum1 = new G4Box(name + "_vacuum_solid",   // name
-                              xAperture - lengthSafety, // x half width
-                              yAperture - lengthSafety, // y half width
-                              chordLength*0.5);         // z half length
+  G4Box* vacuum1 = new G4Box(name + "_vacuum_solid_1",   // name
+                             xAperture - lengthSafety, // x half width
+                             yAperture - lengthSafety, // y half width
+                             chordLength*0.5);         // z half length
 
-      G4Box* vacuum2 = new G4Box(name + "_vacuum_solid",   // name
-                              yAperture - lengthSafety, // x half width
-                              xAperture - lengthSafety, // y half width
-                              chordLength*0.5);         // z half length
+  G4Box* vacuum2 = new G4Box(name + "_vacuum_solid_2",   // name
+                             xApertureSlit - lengthSafety, // x half width
+                             yApertureSlit - lengthSafety, // y half width
+                             chordLength*0.5);         // z half length
 
-      vacuumSolid = new G4UnionSolid(name + "_vacuum_solid_union", vacuum1, vacuum2);
-    }
+  vacuumSolid = new G4UnionSolid(name + "_vacuum_solid_union", vacuum1, vacuum2, Rot, Trans);
     
   RegisterSolid(innerSolid);
   RegisterSolid(vacuumSolid);

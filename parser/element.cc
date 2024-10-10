@@ -153,6 +153,11 @@ void Element::PublishMembers()
   publish("offsetY",     &Element::offsetY);
   publish("jawTiltLeft",     &Element::jawTiltLeft);
   publish("jawTiltRight",     &Element::jawTiltRight);
+  publish("xsize2",            &Element::xsize2);
+  publish("ysize2",            &Element::ysize2);
+  publish("offsetX2",            &Element::offsetX2);
+  publish("offsetY2",            &Element::offsetY2);
+  publish("tilt2",            &Element::tilt2);
 
   // screen parameters
   publish("tscint",          &Element::tscint);
@@ -329,6 +334,7 @@ void Element::print(int ident) const
       }
     case ElementType::_ECOL:
     case ElementType::_RCOL:
+    case ElementType::_BMCOL:
     case ElementType::_JCOL:
       {
         std::cout << "x half aperture = " << xsize <<" m" << std::endl
