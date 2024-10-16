@@ -119,6 +119,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include <set>
 #include <sstream>
 #include <string>
+#include <boost/algorithm/string.hpp>
 #include <utility>
 #include <vector>
 
@@ -1279,6 +1280,38 @@ void BDSDetectorConstruction::BuildPhysicsBias()
 		  egMaterial->AttachTo(lv);
 	    }
 	}
+
+      // Build material bias object for a specific LV based on material bias list in the component
+      auto nameAndMaterialLVBiasList = accCom->GetBiasMaterialLVList();
+      if (!nameAndMaterialLVBiasList.empty() || useDefaultBiasMaterial)
+      {
+        std::map<std::string, std::string> namesAndBiasesMap;
+        for (auto lvbias : nameAndMaterialLVBiasList)
+        {
+          std::vector<std::string> nameAndBiasVector;
+          boost::split(nameAndBiasVector, lvbias, boost::is_any_of(":"));
+          namesAndBiasesMap[nameAndBiasVector[0]] = nameAndBiasVector[1];
+        }
+        auto allLVs       = accCom->GetAcceleratorMaterialLogicalVolumes();
+        if (debug)
+        {G4cout << __METHOD_NAME__ << "# of logical volumes for biasing under 'materialLV': " << allLVs.size() << G4endl;}
+        for (auto lv : allLVs)
+        {// BDSAcceleratorComponent automatically removes 'vacuum' volumes from all so we don't need to check
+          if (debug)
+          {G4cout << __METHOD_NAME__ << "Biasing 'materialLV' logical volume: " << lv << " " << lv->GetName() << G4endl;}
+          for (const auto& nameAndBias : namesAndBiasesMap)
+          {
+            if (lv->GetName().find(nameAndBias.first) != std::string::npos)
+            {
+              G4cout << nameAndBias.first << G4endl;
+              G4cout << lv->GetName() << G4endl;
+              G4cout << lv->GetName().find(nameAndBias.first) << G4endl;
+              auto egMaterialLV = BuildCrossSectionBias({nameAndBias.second}, defaultBiasMaterialList, accName);
+              egMaterialLV->AttachTo(lv);
+            }
+          }
+        }
+      }
     }
   
   if (useBiasForWorldContents)

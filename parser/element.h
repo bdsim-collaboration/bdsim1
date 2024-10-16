@@ -192,11 +192,14 @@ namespace GMAD
     std::string bias;
     std::string biasMaterial;
     std::string biasVacuum;
+    std::string biasMaterialLV;
     ///@}
     /// physics biasing list for the material
     std::list<std::string> biasMaterialList;
     /// physics biasing list for the vacuum
     std::list<std::string> biasVacuumList;
+    /// physics biasing list for specific LVs
+    std::list<std::string> biasMaterialLVList;
 
     /// minimum kinetic energy for user limits - respected on element by element basis
     double minimumKineticEnergy;

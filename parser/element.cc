@@ -223,6 +223,7 @@ void Element::PublishMembers()
   publish("bias",                &Element::bias);
   publish("biasMaterial",        &Element::biasMaterial);
   publish("biasVacuum",          &Element::biasVacuum);
+  publish("biasMaterialLV",      &Element::biasMaterialLV);
 
   publish("minimumKineticEnergy",&Element::minimumKineticEnergy);
 
@@ -601,8 +602,10 @@ void Element::flush()
   bias         = "";
   biasMaterial = "";
   biasVacuum   = "";
+  biasMaterialLV   = "";
   biasMaterialList.clear();
   biasVacuumList.clear();
+  biasMaterialLVList.clear();
   
   minimumKineticEnergy = 0;
 
@@ -699,6 +702,7 @@ void Element::set(const Parameters& params)
                 {
                   biasMaterialList.push_back(tok);
                   biasVacuumList.push_back(tok);
+                  biasMaterialLVList.push_back(tok);
                 }
             }
           else if (property == "biasMaterial")
@@ -713,6 +717,12 @@ void Element::set(const Parameters& params)
               std::string tok;
               while(ss >> tok) {biasVacuumList.push_back(tok);}
             }
+          else if (property == "biasMaterialLV")
+          {
+            std::stringstream ss(biasMaterialLV);
+            std::string tok;
+            while(ss >> tok) {biasMaterialLVList.push_back(tok);}
+          }
         }
     }
 }

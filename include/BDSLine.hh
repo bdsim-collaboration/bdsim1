@@ -92,6 +92,7 @@ public:
   /// @{ Copy the bias list to each component.
   virtual void SetBiasVacuumList(const std::list<std::string>& biasVacuumList);
   virtual void SetBiasMaterialList(const std::list<std::string>& biasMaterialList);
+  virtual void SetBiasMaterialLVList(const std::list<std::string>& biasMaterialLVList);
   /// @}
 
   /// Set the region name for each component.
