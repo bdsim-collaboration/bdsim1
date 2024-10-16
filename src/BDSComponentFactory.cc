@@ -362,7 +362,7 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateComponent(Element const* ele
       {component = CreateEllipticalCollimator(); break;}
     case ElementType::_RCOL:
       {component = CreateRectangularCollimator(); break;}
-      case ElementType::_BMCOL:
+    case ElementType::_BMCOL:
       {component = CreateBeamMaskCollimator(); break;}
     case ElementType::_TARGET:
       {component = CreateTarget(); break;}
@@ -1462,23 +1462,26 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateBeamMaskCollimator()
   if (!HasSufficientMinimumLength(element))
   {return nullptr;}
   G4bool circularOuter = false;
-  G4String apertureType = G4String(element->apertureType);
-  if (apertureType == "circular")
+  G4String cavityModel = G4String(element->cavityModel);
+  if (cavityModel == "circular")
   {circularOuter = true;}
   return new BDSCollimatorBeamMask(elementName,
-                                      element->l*CLHEP::m,
-                                      PrepareHorizontalWidth(element),
-                                      PrepareMaterial(element),
-                                      PrepareVacuumMaterial(element),
-                                      element->xsize*CLHEP::m,
-                                      element->ysize*CLHEP::m,
-                                      element->xsize2*CLHEP::m,
-                                      element->ysize2*CLHEP::m,
-                                      element->offsetX2*CLHEP::m,
-                                      element->offsetY2*CLHEP::m,
-                                      element->tilt2*CLHEP::rad,
-                                      PrepareColour(element),
-                                      circularOuter);
+                                   element->l*CLHEP::m,
+                                   PrepareBeamPipeInfo(element),
+                                   PrepareHorizontalWidth(element),
+                                   PrepareMaterial(element),
+                                   PrepareVacuumMaterial(element),
+                                   element->xsize*CLHEP::m,
+                                   element->ysize*CLHEP::m,
+                                   element->xsize2*CLHEP::m,
+                                   element->ysize2*CLHEP::m,
+                                   element->offsetX*CLHEP::m,
+                                   element->offsetY*CLHEP::m,
+                                   element->offsetX2*CLHEP::m,
+                                   element->offsetY2*CLHEP::m,
+                                   element->tilt2*CLHEP::rad,
+                                   PrepareColour(element),
+                                   circularOuter);
 }
 
 BDSAcceleratorComponent* BDSComponentFactory::CreateTarget()
