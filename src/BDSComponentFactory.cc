@@ -77,6 +77,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSFieldType.hh"
 #include "BDSGlobalConstants.hh"
 #include "BDSGap.hh"
+#include "BDSGasCapillary.hh"
 #include "BDSIntegratorSet.hh"
 #include "BDSIntegratorSetType.hh"
 #include "BDSIntegratorType.hh"
@@ -364,6 +365,8 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateComponent(Element const* ele
       {component = CreateRectangularCollimator(); break;}
     case ElementType::_BMCOL:
       {component = CreateBeamMaskCollimator(); break;}
+    case ElementType::_GASCAP:
+      {component = CreateGasCapillary(); break;}
     case ElementType::_TARGET:
       {component = CreateTarget(); break;}
     case ElementType::_JCOL:
@@ -1482,6 +1485,30 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateBeamMaskCollimator()
                                    element->tilt2*CLHEP::rad,
                                    PrepareColour(element),
                                    circularOuter);
+}
+
+BDSAcceleratorComponent* BDSComponentFactory::CreateGasCapillary()
+{
+  if (!HasSufficientMinimumLength(element))
+  {return nullptr;}
+
+  G4bool circularOuter = false;
+  G4String cavityModel = G4String(element->cavityModel);
+  if (cavityModel == "circular")
+  {circularOuter = true;}
+
+  std::vector<std::string> materials{ element->layerMaterials.begin(), element->layerMaterials.end() };
+
+  return new BDSGasCapillary(elementName,
+                             element->l*CLHEP::m,
+                             PrepareBeamPipeInfo(element),
+                             PrepareHorizontalWidth(element),
+                             BDSMaterials::Instance()->GetMaterial(materials[0]),
+                             BDSMaterials::Instance()->GetMaterial(materials[1]),
+                             BDSMaterials::Instance()->GetMaterial(materials[2]),
+                             element->xsize*CLHEP::m,
+                             element->materialThickness*CLHEP::m,
+                             circularOuter);
 }
 
 BDSAcceleratorComponent* BDSComponentFactory::CreateTarget()

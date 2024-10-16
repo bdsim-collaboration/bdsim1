@@ -149,15 +149,15 @@ void Element::PublishMembers()
   publish("ysizeOut",         &Element::ysizeOut);
   publish("xsizeLeft",        &Element::xsizeLeft);
   publish("xsizeRight",       &Element::xsizeRight);
-  publish("offsetX",     &Element::offsetX);
-  publish("offsetY",     &Element::offsetY);
-  publish("jawTiltLeft",     &Element::jawTiltLeft);
+  publish("offsetX",          &Element::offsetX);
+  publish("offsetY",          &Element::offsetY);
+  publish("jawTiltLeft",      &Element::jawTiltLeft);
   publish("jawTiltRight",     &Element::jawTiltRight);
   publish("xsize2",            &Element::xsize2);
   publish("ysize2",            &Element::ysize2);
   publish("offsetX2",            &Element::offsetX2);
   publish("offsetY2",            &Element::offsetY2);
-  publish("tilt2",            &Element::tilt2);
+  publish("tilt2",               &Element::tilt2);
 
   // screen parameters
   publish("tscint",          &Element::tscint);

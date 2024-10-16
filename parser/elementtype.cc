@@ -60,6 +60,8 @@ std::string GMAD::typestr(ElementType type)
       {return "rcol";                break;}
     case ElementType::_BMCOL:
       {return "bmcol";                break;}
+    case ElementType::_GASCAP:
+      {return "gascap";               break;}
     case ElementType::_LASER:
       {return "laser";               break;}
     case ElementType::_MATERIAL:

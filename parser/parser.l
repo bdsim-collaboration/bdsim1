@@ -112,6 +112,7 @@ rcol { return RCOL;}
 ecol { return ECOL; } 
 jcol { return JCOL; }
 bmcol { return BMCOL; }
+gascap { return GASCAP; }
 muonspoiler { return MUONSPOILER; }
 muspoiler { return MUONSPOILER; }
 shield {return SHIELD; }

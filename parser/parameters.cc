@@ -115,9 +115,12 @@ Parameters::Parameters()
   setMap["offsetY"]            = false;
   setMap["xsize2"]             = false;
   setMap["ysize2"]             = false;
-  setMap["offsetX2"]            = false;
-  setMap["offsetY2"]            = false;
-  setMap["tilt2"]            = false;
+  setMap["offsetX2"]           = false;
+  setMap["offsetY2"]           = false;
+  setMap["tilt2"]              = false;
+  setMap["gasDiameter"]        = false;
+  setMap["electrodeThickness"] = false;
+  setMap["electrodeMaterial"] = false;
   
   setMap["tscint"]             = false;
   setMap["twindow"]            = false;
@@ -170,6 +173,7 @@ Parameters::Parameters()
   setMap["bias"]                 = false;
   setMap["biasMaterial"]         = false;
   setMap["biasVacuum"]           = false;
+  setMap["biasMaterialLV"]         = false;
   
   setMap["minimumKineticEnergy"] = false;
   

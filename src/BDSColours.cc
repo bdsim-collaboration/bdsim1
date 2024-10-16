@@ -133,6 +133,9 @@ BDSColours::BDSColours()
   colours["LHCyokered"]       = new G4Colour(*(colours["quadrupole"]));// quadrupole red
   colours["gdml"]             = new G4Colour(0.4,   0.2,   0);     // poo brown
   colours["screenframe"]      = new G4Colour(0.7,   0.7,   0.7, 0.4);// light grey, semi-transparent
+  colours["capillaryouter"]   = colours["collimator"];
+  colours["capillarygas"]    = new G4Colour(0.82,  0.1,   0.1, 0.4); // red, semi-transparent
+  colours["electrode"]        = colours["screen"];
 
   // general
   colours["white"]   = new G4Colour(G4Colour::White());
