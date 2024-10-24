@@ -78,6 +78,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSGlobalConstants.hh"
 #include "BDSGap.hh"
 #include "BDSGasCapillary.hh"
+#include "BDSGasJet.hh"
 #include "BDSIntegratorSet.hh"
 #include "BDSIntegratorSetType.hh"
 #include "BDSIntegratorType.hh"
@@ -367,6 +368,8 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateComponent(Element const* ele
       {component = CreateBeamMaskCollimator(); break;}
     case ElementType::_GASCAP:
       {component = CreateGasCapillary(); break;}
+    case ElementType::_GASJET:
+      {component = CreateGasJet(); break;}
     case ElementType::_TARGET:
       {component = CreateTarget(); break;}
     case ElementType::_JCOL:
@@ -1510,6 +1513,25 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateGasCapillary()
                              element->xsize*CLHEP::m,
                              element->materialThickness*CLHEP::m,
                              circularOuter);
+}
+
+BDSAcceleratorComponent* BDSComponentFactory::CreateGasJet()
+{
+  if (!HasSufficientMinimumLength(element))
+  {return nullptr;}
+
+  return new BDSGasJet(elementName,
+                       element->l*CLHEP::m,
+                       PrepareBeamPipeInfo(element),
+                       PrepareMaterial(element),
+                       element->xdir*CLHEP::m,
+                       element->ydir*CLHEP::m,
+                       element->zdir*CLHEP::m,
+                       element->phi*CLHEP::m,
+                       element->theta*CLHEP::m,
+                       element->psi*CLHEP::m,
+                       element->offsetX*CLHEP::m,
+                       element->offsetY*CLHEP::m);
 }
 
 BDSAcceleratorComponent* BDSComponentFactory::CreateTarget()

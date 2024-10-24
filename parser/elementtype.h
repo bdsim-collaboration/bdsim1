@@ -46,7 +46,7 @@ namespace GMAD
     _MATERIAL    = 16,
     _RBEND       = 17,
     _GASCAP      = 18,
-    // = 19,
+    _GASJET      = 19,
     _ELEMENT     = 20,
     _SCREEN      = 21,
     _AWAKESCREEN = 22,
