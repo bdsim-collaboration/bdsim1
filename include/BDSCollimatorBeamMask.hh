@@ -19,7 +19,9 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef BDSCOLLIMATORBEAMMASK_H
 #define BDSCOLLIMATORBEAMMASK_H
 
-#include "BDSCollimator.hh"
+#include "globals.hh"
+
+#include "BDSAcceleratorComponent.hh"
 
 class G4Colour;
 class G4Material;

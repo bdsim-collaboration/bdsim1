@@ -106,26 +106,6 @@ G4String BDSGasCapillary::ElectrodeMaterial() const
   else {return "none";}}
 
 
-void BDSGasCapillary::BuildContainerLogicalVolumeOld()
-{
-  if (circularOuter) {
-    containerSolid = new G4Tubs(name + "_container_solid",
-                                0, horizontalWidth * 0.5, // rMin rMax
-                                chordLength * 0.5,        // length
-                                0, CLHEP::twopi);         // phiMin phiMax
-  }
-  else
-  {
-    containerSolid = new G4Box(name + "_container_solid",
-                               horizontalWidth * 0.5,   // pX
-                               horizontalWidth * 0.5,   // pY
-                               chordLength * 0.5);      // pZ
-  }
-  containerLogicalVolume = new G4LogicalVolume(containerSolid, emptyMaterial, name + "_container_lv");
-  BDSExtent ext(horizontalWidth * 0.5, horizontalWidth * 0.5, chordLength * 0.5);
-  SetExtent(ext);
-}
-
 void BDSGasCapillary::BuildContainerLogicalVolume()
 {
   BDSBeamPipeFactory* factory = BDSBeamPipeFactory::Instance();

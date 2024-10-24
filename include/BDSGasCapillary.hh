@@ -60,7 +60,6 @@ protected:
     /// we can't call a virtual function in a constructor.
     virtual void CheckParameters();
 
-    virtual void BuildContainerLogicalVolumeOld();
     virtual void BuildContainerLogicalVolume();
 
     virtual void BuildUncutSolid();
