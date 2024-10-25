@@ -1303,9 +1303,6 @@ void BDSDetectorConstruction::BuildPhysicsBias()
           {
             if (lv->GetName().find(nameAndBias.first) != std::string::npos)
             {
-              G4cout << nameAndBias.first << G4endl;
-              G4cout << lv->GetName() << G4endl;
-              G4cout << lv->GetName().find(nameAndBias.first) << G4endl;
               auto egMaterialLV = BuildCrossSectionBias({nameAndBias.second}, defaultBiasMaterialList, accName);
               egMaterialLV->AttachTo(lv);
             }
