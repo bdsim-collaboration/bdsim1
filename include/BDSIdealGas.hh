@@ -20,12 +20,17 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #define BDSIDEALGAS_H
 
 #include "globals.hh" // geant4 globals / types
+
+#include <iomanip>
 #include <list>
+#include <map>
+#include <set>
+#include <vector>
 
 class BDSIdealGas{
 public:
     G4double CalculateDensityFromPressureTemperature(const std::list<G4String>& components,
-                                                     const std::list<Type>&     componentFractions,
+                                                     const std::list<G4double>& componentFractions,
                                                      G4double pressure,
                                                      G4double temperature);
 };

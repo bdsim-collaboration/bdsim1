@@ -21,8 +21,16 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 
 
 G4double BDSIdealGas::CalculateDensityFromPressureTemperature(const std::list<G4String>& components,
-                                                              const std::list<Type>&     componentFractions,
+                                                              const std::list<G4double>& componentFractions,
                                                               G4double pressure,
                                                               G4double temperature) {
+  // auto m = BDSMaterials::Instance()->GetMaterial("name");
+  // m->
+  std::list<G4double> partialPressures;
+  for (auto fraction : componentFractions)
+  {
+    partialPressures.push_back(fraction * pressure);
+  }
+
   return 0;
 }
