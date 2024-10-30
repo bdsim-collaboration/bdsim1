@@ -20,17 +20,47 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSIdealGas.hh"
 
 
-G4double BDSIdealGas::CalculateDensityFromPressureTemperature(const std::list<G4String>& components,
+G4double BDSIdealGas::CalculateTemperatureFromPressureDensity(const std::list<G4String>& components,
                                                               const std::list<G4double>& componentFractions,
                                                               G4double pressure,
-                                                              G4double temperature) {
-  // auto m = BDSMaterials::Instance()->GetMaterial("name");
-  // m->
-  std::list<G4double> partialPressures;
-  for (auto fraction : componentFractions)
-  {
-    partialPressures.push_back(fraction * pressure);
-  }
+                                                              G4double density) {
 
-  return 0;
+  G4double averageMass = CalculateAverageMass(components, componentFractions);
+  G4double temperature = (pressure*Avogadro*averageMass)/(R*density);
+
+  return temperature;
 }
+
+G4double BDSIdealGas::CalculatePressureFromTemperatureDensity(const std::list<G4String>& components,
+                                                              const std::list<G4double>& componentFractions,
+                                                              G4double temperature,
+                                                              G4double density) {
+
+  G4double averageMass = CalculateAverageMass(components, componentFractions);
+  G4double pressure = (density*R*temperature)/(Avogadro*averageMass);
+
+  return pressure;
+}
+
+
+
+G4double BDSIdealGas::CalculateDensityFromNumberDensity(const std::list<G4String>& components,
+                                                        const std::list<G4double>& componentFractions,
+                                                        G4double numberDensity) {
+
+  G4double averageMass = CalculateAverageMass(components, componentFractions);
+  G4double density = numberDensity*averageMass;
+
+  return density;
+}
+
+G4double BDSIdealGas::CalculateDensityFromMolarDensity(const std::list<G4String>& components,
+                                                       const std::list<G4double>& componentFractions,
+                                                       G4double molarDensity) {
+
+  G4double averageMass = CalculateAverageMass(components, componentFractions);
+  G4double density = molarDensity*Avogadro*averageMass;
+
+  return density;
+}
+

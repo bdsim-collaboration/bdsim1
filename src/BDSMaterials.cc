@@ -18,6 +18,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "BDSDebug.hh"
 #include "BDSException.hh"
+#include "BDSIdealGas.hh"
 #include "BDSMaterials.hh"
 #include "BDSParser.hh"
 #include "BDSUtilities.hh"
@@ -1008,6 +1009,9 @@ void BDSMaterials::AddMaterial(G4String name,
 {
   name = BDS::LowerCase(name);
   DensityCheck(density, name);
+
+  auto IdealGas = new BDSIdealGas();
+  IdealGas->CalculateDensityFromPressureTemperature<Type>(components, componentFractions, pressure, temperature);
   
   G4Material* tmpMaterial = new G4Material(name,
 					   density*CLHEP::g/CLHEP::cm3, 

@@ -19,6 +19,8 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef BDSIDEALGAS_H
 #define BDSIDEALGAS_H
 
+#include "BDSMaterials.hh"
+
 #include "globals.hh" // geant4 globals / types
 
 #include <iomanip>
@@ -29,10 +31,58 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 
 class BDSIdealGas{
 public:
+    template <typename Type>
     G4double CalculateDensityFromPressureTemperature(const std::list<G4String>& components,
+                                                     const std::list<Type>& componentFractions,
+                                                     G4double pressure,
+                                                     G4double temperature) {
+
+      G4double averageMass = CalculateAverageMass(components, componentFractions);
+      G4double density = (pressure*Avogadro*averageMass)/(R*temperature);
+
+      return density;
+    }
+
+    G4double CalculateTemperatureFromPressureDensity(const std::list<G4String>& components,
                                                      const std::list<G4double>& componentFractions,
                                                      G4double pressure,
-                                                     G4double temperature);
+                                                     G4double density);
+
+    G4double CalculatePressureFromTemperatureDensity(const std::list<G4String>& components,
+                                                     const std::list<G4double>& componentFractions,
+                                                     G4double temperature,
+                                                     G4double density);
+
+    G4double CalculateDensityFromNumberDensity(const std::list<G4String>& components,
+                                               const std::list<G4double>& componentFractions,
+                                               G4double numberDensity);
+
+    G4double CalculateDensityFromMolarDensity(const std::list<G4String>& components,
+                                              const std::list<G4double>& componentFractions,
+                                              G4double molarDensity);
+
+    template <typename Type>
+    G4double CalculateAverageMass(const std::list<G4String>& components,
+                                  const std::list<Type>& componentFractions){
+
+      std::vector<G4String> componentsVector{ components.begin(), components.end() };
+      std::vector<G4double> componentFractionsVector{ componentFractions.begin(), componentFractions.end() };
+
+      G4double averageMass = 0;
+      for (int i=0; i < componentsVector.size(); i++)
+      {
+        auto component = BDSMaterials::Instance()->GetMaterial(componentsVector[i]);
+        // GET THE MASS NUMBER OR MASS FOR EACH ELEMENT
+        G4double mass = componentFractionsVector[i] * 1;
+        averageMass = averageMass + mass;
+      }
+
+      return averageMass;
+    }
+
+    ///constants
+    G4double Avogadro = 6.022e23;
+    G4double R = 8.314;
 };
 
 #endif
