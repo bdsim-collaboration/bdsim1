@@ -146,7 +146,7 @@ public:
     static void CheckGasLaw(G4double &temperature, G4double &pressure, G4double &density) {
       G4cout << temperature << " " << pressure << " " << density << G4endl;
 
-      temp = 3.14159267;
+      temperature = 300;
 
       G4cout << temperature << " " << pressure << " " << density << G4endl;
     }
