@@ -119,7 +119,6 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include <set>
 #include <sstream>
 #include <string>
-#include <boost/algorithm/string.hpp>
 #include <utility>
 #include <vector>
 
@@ -1286,11 +1285,12 @@ void BDSDetectorConstruction::BuildPhysicsBias()
       if (!nameAndMaterialLVBiasList.empty() || useDefaultBiasMaterial)
       {
         std::map<std::string, std::string> namesAndBiasesMap;
-        for (auto lvbias : nameAndMaterialLVBiasList)
+        for (G4String lvbias : nameAndMaterialLVBiasList)
         {
-          std::vector<std::string> nameAndBiasVector;
-          boost::split(nameAndBiasVector, lvbias, boost::is_any_of(":"));
-          namesAndBiasesMap[nameAndBiasVector[0]] = nameAndBiasVector[1];
+          auto splitpos = lvbias.first(':');
+          G4String lvname = lvbias.operator()(0, splitpos);
+          G4String biasname = lvbias.operator()(splitpos+1, lvbias.length()-splitpos);
+          namesAndBiasesMap[lvname] = biasname;
         }
         auto allLVs       = accCom->GetAcceleratorMaterialLogicalVolumes();
         if (debug)
