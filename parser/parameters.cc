@@ -118,7 +118,6 @@ Parameters::Parameters()
   setMap["offsetX2"]           = false;
   setMap["offsetY2"]           = false;
   setMap["tilt2"]              = false;
-  setMap["gasDiameter"]        = false;
   
   setMap["tscint"]             = false;
   setMap["twindow"]            = false;
