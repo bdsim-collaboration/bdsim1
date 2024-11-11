@@ -1287,9 +1287,10 @@ void BDSDetectorConstruction::BuildPhysicsBias()
         std::map<std::string, std::string> namesAndBiasesMap;
         for (G4String lvbias : nameAndMaterialLVBiasList)
         {
-          auto splitpos = lvbias.first(':');
-          G4String lvname = lvbias.operator()(0, splitpos);
-          G4String biasname = lvbias.operator()(splitpos+1, lvbias.length()-splitpos);
+          auto splitpos = lvbias.find(':');
+          auto lvname = lvbias.substr(0,splitpos);
+          auto biasname = lvbias.substr(splitpos+1);
+          G4cout << lvname << " " << biasname << G4endl;
           namesAndBiasesMap[lvname] = biasname;
         }
         auto allLVs       = accCom->GetAcceleratorMaterialLogicalVolumes();
