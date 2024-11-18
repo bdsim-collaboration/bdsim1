@@ -20,6 +20,8 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #define BDSIDEALGAS_H
 
 #include "BDSMaterials.hh"
+#include "BDSUtilities.hh"
+#include "BDSWarning.hh"
 
 #include "globals.hh" // geant4 globals / types
 
@@ -29,100 +31,98 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include <set>
 #include <vector>
 
+/**
+ * @brief A class to perform ideal gas calculations.
+ *
+ * @author Marin Deniaud
+ */
+
 class BDSIdealGas{
 public:
     template <typename Type>
-    G4double CalculateDensityFromPressureTemperature(const std::list<G4String>& components,
-                                                     const std::list<Type>& componentFractions,
-                                                     G4double pressure,
-                                                     G4double temperature) {
+    static G4double CalculateDensityFromPressureTemperature(const std::list<G4String>& components,
+                                                            const std::list<Type>& componentFractions,
+                                                            G4double pressure,
+                                                            G4double temperature) {
 
       G4double averageMolarMass = CalculateAverageMolarMass(components, componentFractions);
-      G4double density = (pressure*averageMolarMass)/(R*temperature);
+      G4double density = (pressure*averageMolarMass)/(CLHEP::Avogadro*CLHEP::k_Boltzmann*temperature);
 
-      G4cout << "density : " << density/1000 << G4endl;
       return density/1000; //convert kg.m-3 to g.cm-3
     }
 
     template <typename Type>
-    G4double CalculateTemperatureFromPressureDensity(const std::list<G4String>& components,
-                                                     const std::list<Type>& componentFractions,
-                                                     G4double pressure,
-                                                     G4double density) {
+    static G4double CalculateTemperatureFromPressureDensity(const std::list<G4String>& components,
+                                                            const std::list<Type>& componentFractions,
+                                                            G4double pressure,
+                                                            G4double density) {
 
       G4double averageMolarMass = CalculateAverageMolarMass(components, componentFractions);
-      G4double temperature = (pressure*averageMolarMass)/(R*density);
+      G4double temperature = (pressure*averageMolarMass)/(CLHEP::Avogadro*CLHEP::k_Boltzmann*(density/1000));
 
       return temperature;
     }
 
     template <typename Type>
-    G4double CalculatePressureFromTemperatureDensity(const std::list<G4String>& components,
+    static G4double CalculatePressureFromTemperatureDensity(const std::list<G4String>& components,
                                                      const std::list<Type>& componentFractions,
                                                      G4double temperature,
                                                      G4double density) {
 
       G4double averageMolarMass = CalculateAverageMolarMass(components, componentFractions);
-      G4double pressure = (density*R*temperature)/(averageMolarMass);
+      G4double pressure = ((density/1000)*CLHEP::Avogadro*CLHEP::k_Boltzmann*temperature)/(averageMolarMass);
 
       return pressure;
     }
 
     template <typename Type>
-    G4double CalculateDensityFromNumberDensity(const std::list<G4String>& components,
+    static G4double CalculateDensityFromNumberDensity(const std::list<G4String>& components,
                                                const std::list<Type>& componentFractions,
                                                G4double numberDensity) {
 
       G4double averageMolarMass = CalculateAverageMolarMass(components, componentFractions);
-      G4double density = numberDensity*averageMolarMass/Avogadro;
+      G4double density = numberDensity*averageMolarMass/CLHEP::Avogadro;
 
-      return density;
+      return density/1000;
     }
 
     template <typename Type>
-    G4double CalculateDensityFromMolarDensity(const std::list<G4String>& components,
+    static G4double CalculateDensityFromMolarDensity(const std::list<G4String>& components,
                                               const std::list<Type>& componentFractions,
                                               G4double molarDensity) {
 
       G4double averageMolarMass = CalculateAverageMolarMass(components, componentFractions);
       G4double density = molarDensity*averageMolarMass;
 
-      return density;
+      return density/1000;
     }
 
     template <typename Type>
-    G4double CalculateAverageMolarMass(const std::list<G4String>& components,
-                                       const std::list<Type>& componentFractions){
+    static G4double CalculateAverageMolarMass(const std::list<G4String>& components,
+                                              const std::list<Type>& componentFractions){
 
       std::vector<G4String> componentsVector{ components.begin(), components.end() };
       std::vector<Type> componentFractionsVector{ componentFractions.begin(), componentFractions.end() };
       std::map<G4String, Type> componentsTable;
 
-
       G4double averageMolarMass = 0;
       G4double fracSum = 0;
       for (size_t i=0; i < componentsVector.size(); i++)
       {
-        // TODO - Remove couts
-        G4cout << "componentName : " << componentsVector[i] << " | componentFraction : " << componentFractionsVector[i] << G4endl;
-        auto component = BDSMaterials::Instance()->GetMaterial(componentsVector[i]);
+        const G4String& componentName = componentsVector[i];
+        auto component = BDSMaterials::Instance()->GetMaterial(componentName);
 
         size_t nbelement = component->GetNumberOfElements();
-        G4cout << "GetNumberOfElements : " << nbelement << G4endl;
         if (nbelement == 1)
         {
           auto element = component->GetElement(0);
           auto molarMass = element->GetN();
-          G4cout << "Element Name : " << element->GetName() << " | molarMass : " << molarMass << G4endl;
-          //G4cout << "GetAtomsVector : "  << component->GetAtomsVector()[i] << G4endl;
           averageMolarMass = averageMolarMass + componentFractionsVector[i] * molarMass;
           fracSum = fracSum + componentFractionsVector[i];
         }
         else
         {
-          G4cout << "=======================================" << G4endl;
           auto elementVector = component->GetElementVector();
-          //G4cout << "GetAtomsVector : "  << component->GetAtomsVector()[i] << G4endl;
           std::list<G4String> elementNames;
           std::list<Type> elementFractions;
           for (const auto element: *elementVector)
@@ -135,27 +135,31 @@ public:
           }
           averageMolarMass = averageMolarMass + componentFractionsVector[i] * CalculateAverageMolarMass(elementNames, elementFractions);
           fracSum = fracSum + componentFractionsVector[i];
-          G4cout << "=======================================" << G4endl;
         }
       }
 
-      G4cout << "averageMolarMass : " << averageMolarMass/fracSum << G4endl;
       return averageMolarMass/fracSum;
     }
 
-    static void CheckGasLaw(G4double &temperature, G4double &pressure, G4double &density) {
-      G4cout << temperature << " " << pressure << " " << density << G4endl;
 
-      temperature = 300;
+    template <typename Type>
+    static void CheckGasLaw(G4double &temperature, G4double &pressure, G4double &density,
+                            const std::list<G4String>& components,
+                            const std::list<Type>& componentFractions) {
 
-      G4cout << temperature << " " << pressure << " " << density << G4endl;
+#ifdef BDSDEBUG
+      G4cout << "BDSIdealGas::CheckGasLaw: " << G4endl;
+#endif
+      G4double calcDensity = CalculateDensityFromPressureTemperature(components, componentFractions, pressure, temperature);
+      if(density != calcDensity)
+      {
+        G4String msg = "Ideal gas density calculated from pressure and temperature doesn't match given density\n";
+        msg += "Assuming temperature of 300K and computing correct pressure for this density";
+        BDS::Warning(msg);
+        temperature = 300;
+        pressure = CalculatePressureFromTemperatureDensity(components, componentFractions, temperature, density);
+      }
     }
-
-
-private:
-    ///constants
-    G4double Avogadro = 6.022e23;
-    G4double R = 8.314;
 };
 
 #endif

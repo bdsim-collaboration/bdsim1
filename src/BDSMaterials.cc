@@ -1010,18 +1010,10 @@ void BDSMaterials::AddMaterial(G4String name,
   name = BDS::LowerCase(name);
   DensityCheck(density, name);
 
-
-  if(state == G4State::kStateGas) {
-    BDSIdealGas::CheckGasLaw(temperature, pressure, density);
-    G4cout << temperature << " " << pressure << " " << density << G4endl;
-  }
-
-
-  // TODO - Remove test of ideal gas functions
-  if (name == "air") {
-    G4cout << "Material name : " << name << G4endl;
-    auto IdealGas = new BDSIdealGas();
-    IdealGas->CalculateDensityFromPressureTemperature<Type>(components, componentFractions, pressure, temperature);
+  // Recursive check on the components of a gas material to check if the ideal gas equation is respected
+  if(state == G4State::kStateGas && instance != nullptr)
+  {
+    BDSIdealGas::CheckGasLaw(temperature, pressure, density, components, componentFractions);
   }
   
   G4Material* tmpMaterial = new G4Material(name,
