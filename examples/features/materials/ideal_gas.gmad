@@ -1,0 +1,9 @@
+d1: drift, l=0.5, vacuumMaterial="mat";
+
+mat: matdef, T=300, P=1e5, state="gas", componentsFractions={0.5, 0.5}, components={ "C", "O" }, density=1e-8;
+
+lat: line = (d1);
+use, lat;
+
+beam, particle="e-",
+      energy=1*GeV;

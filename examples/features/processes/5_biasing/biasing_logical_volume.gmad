@@ -1,0 +1,8 @@
+gc: gascap, l=0.5*m, aper1=0.15*m, horizontalWidth=0.1*m, xsize=0.03*m, cavityModel="rectangular",
+            layerMaterials={"G4_Si", "G4_Xe" ,"G4_C"}, materialThickness=0.01*m, biasMaterialLV="capillaryGas:biasOn";
+
+lat: line = (gc);
+use, lat;
+
+beam, particle="e-",
+      energy=1*GeV;
