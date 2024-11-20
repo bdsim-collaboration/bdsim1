@@ -8,3 +8,5 @@ use, lat;
 
 beam, particle="e-",
       energy=1*GeV;
+
+option, physicsList = "em";
