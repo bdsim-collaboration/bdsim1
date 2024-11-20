@@ -1,0 +1,1 @@
+simple_testing(material-ideal-gas  "--file=ideal-gas.gmad"   "")
