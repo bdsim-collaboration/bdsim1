@@ -102,6 +102,12 @@ if(USE_SIXTRACKLINK)
   message(STATUS "SixTrack link ON")
 endif()
 
+# Find hdf5
+option( USE_PLASMA_HDF5 "Include HDF5 support."  OFF )
+if(USE_PLASMA_HDF5)
+  find_package(HDF5 REQUIRED COMPONENTS CXX)
+endif()
+
 # Find GEANT4
 include(cmake/Geant4.cmake)
 
@@ -220,6 +226,9 @@ if (USE_GDML)
 endif()
 target_link_libraries(${BDSIM_LIB_NAME} gmad)
 generate_export_header(${BDSIM_LIB_NAME})
+if (USE_PLASMA_HDF5)
+  target_link_libraries(${BDSIM_LIB_NAME} ${HDF5_CXX_LIBRARIES})
+endif()
 
 add_executable(bdsimExec ${CMAKE_BINARY_DIR}/bdsim.cc)
 
