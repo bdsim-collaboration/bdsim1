@@ -1,0 +1,19 @@
+d1: drift, l=0.25;
+q1: quadrupole, l=0.5, k1=2.0;
+q2: quadrupole, l=0.5, k1=-2.0;
+
+lat : line = (d1,q1,d1,d1,q2,d1);
+use, period=lat;
+
+sample, all;
+
+option, stopSecondaries=1;
+
+
+beam,  particle="e-",
+       energy = 124.5*MeV,
+       distrType  = "hdf5",
+       distrFile  = "hdf5.h5";
+
+
+option, printFractionEvents=-1;
