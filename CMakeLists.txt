@@ -84,6 +84,9 @@ include(cmake/DCMTK.cmake)
 # AWAKE
 include(modules/AWAKE.cmake)
 
+# PLASMA_HDF5
+include(modules/PLASMA_HDF5.cmake)
+
 # GDML (on by default)
 option( USE_GDML "Include GDML support."  ON )
 if(USE_GDML)
@@ -100,12 +103,6 @@ option( USE_SIXTRACKLINK "Include linking code for SixTrack." OFF )
 if(USE_SIXTRACKLINK)
   add_definitions("-DUSE_SIXTRACKLINK")
   message(STATUS "SixTrack link ON")
-endif()
-
-# Find hdf5
-option( USE_PLASMA_HDF5 "Include HDF5 support."  OFF )
-if(USE_PLASMA_HDF5)
-  find_package(HDF5 REQUIRED COMPONENTS CXX)
 endif()
 
 # Find GEANT4
@@ -188,6 +185,11 @@ if (USE_AWAKE)
   include_directories(${CMAKE_CURRENT_SOURCE_DIR}/modules/AWAKE/include)
   file(GLOB awake_sources "${CMAKE_CURRENT_SOURCE_DIR}/modules/AWAKE/src/*.cc")
   list(APPEND bdsim_sources ${awake_sources})
+endif()
+if (USE_PLASMA_HDF5)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/modules/PLASMA_HDF5/include)
+  file(GLOB plasma_hdf5_sources "${CMAKE_CURRENT_SOURCE_DIR}/modules/PLASMA_HDF5/src/*.cc")
+  list(APPEND bdsim_sources ${plasma_hdf5_sources})
 endif()
 
 if($ENV{VERBOSE})
