@@ -126,11 +126,14 @@ namespace GMAD
     double xsizeOut, ysizeOut; ///< collimator aperture or laser spotsize for laser
     double xsizeLeft, xsizeRight; ///< individual collimator jaw half widths
     double jawTiltLeft, jawTiltRight; ///< jaw collimator jaw tilts (angle in x-z plane)
+    double offsetX; ///< offset X
+    double offsetY; ///< offset Y
+
+    // PWFA
     double xsize2, ysize2; ///< size of the beam mask second aperture
     double offsetX2, offsetY2; ///< offset of the beam mask second aperture
     double tilt2; ///< tilt of the beam mask second aperture
-    double offsetX; ///< offset X
-    double offsetY; ///< offset Y
+    std::string outerShape; ///< 'rectangular' or 'circular'. used in gascap and bmcol
 
     // screen parameters
     double tscint; ///<thickness of scintillating part of screen

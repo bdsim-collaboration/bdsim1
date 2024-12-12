@@ -153,11 +153,14 @@ void Element::PublishMembers()
   publish("offsetY",          &Element::offsetY);
   publish("jawTiltLeft",      &Element::jawTiltLeft);
   publish("jawTiltRight",     &Element::jawTiltRight);
+
+  // PWFA
   publish("xsize2",            &Element::xsize2);
   publish("ysize2",            &Element::ysize2);
-  publish("offsetX2",            &Element::offsetX2);
-  publish("offsetY2",            &Element::offsetY2);
-  publish("tilt2",               &Element::tilt2);
+  publish("offsetX2",          &Element::offsetX2);
+  publish("offsetY2",          &Element::offsetY2);
+  publish("tilt2",             &Element::tilt2);
+  publish("outerShape",        &Element::tilt2);
 
   // screen parameters
   publish("tscint",          &Element::tscint);
@@ -542,6 +545,14 @@ void Element::flush()
   offsetY = 0;
   jawTiltLeft = 0;
   jawTiltRight = 0;
+
+  // PWFA
+  xsize2 = 0;
+  ysize2 = 0;
+  offsetX2 = 0;
+  offsetY2 = 0;
+  tilt2 = 0;
+  outerShape = "rectangular";
 
   // screen parameters
   tscint = 0.0003;
