@@ -43,10 +43,10 @@ The overall program structure should follow:
   definitions will not be observed.
 * Apart from this, all other parts can be defined or redefined in any order in the input.
 * A beam line (using a sequence / line and the :code:`use` command are optional.
-   
+
 These are described in the following sections. Aside from these standard parameters, more
 detail may be added to the model through customisation - see :ref:`model-customisation`.
-  
+
 .. _circular-machines:
 
 Circular Machines
@@ -133,7 +133,7 @@ Magnet Strength Polarity
 
 
 .. _synchronous-time-and-phase:
-	     
+
 Synchronous Time and Phase
 --------------------------
 
@@ -148,7 +148,7 @@ each instance so that the fields are unique with their own synchronous time or p
 
 
 .. _acceleration:
-	     
+
 Acceleration
 ------------
 
@@ -223,6 +223,7 @@ The following elements may be defined
 * `marker`_
 * `wirescanner`_
 * `ct`_
+* `bmcol`_
 
 .. TODO add screen, awakescreen
 
@@ -977,7 +978,7 @@ can be used.
 .. note:: Pole face rotation and fringe fields kicks are unavailable for tkickers
 
 .. _component-rf:
-	  
+
 rf
 ^^^^
 
@@ -1100,7 +1101,7 @@ pillbox cavity much the same way as `rf`.
   ambiguous given a combination of parameters.
 
 .. tabularcolumns:: |p{4cm}|p{4cm}|p{2cm}|p{2cm}|
-  
+
 +----------------+-------------------------------+--------------+---------------------+
 | **Parameter**  | **Description**               | **Default**  | **Required**        |
 +================+===============================+==============+=====================+
@@ -1203,7 +1204,7 @@ volume is square.
 |                        | particles in this collimator only |                |               |
 +------------------------+-----------------------------------+----------------+---------------+
 
-Notes: 
+Notes:
 
 * `horizontalWidth` should be big enough to encompass the xsize and ysize.
 * The parameter `minimumKineticEnergy` (in GeV by default) may be specified to artificially kill
@@ -1235,7 +1236,7 @@ Examples: ::
 Example: ::
 
   r1: rcol, l=1*m, material="Cu", xsize=10*mm, ysize=3*mm, apertureType="circular", horizontalWidth=10*cm;
-   
+
 
 ecol
 ^^^^
@@ -1303,7 +1304,7 @@ This feature can be useful for example in aligning the jaws to the beam envelope
 +------------------------+-----------------------------------+----------------+---------------+
 
 
-Notes: 
+Notes:
 
 * The `horizontalWidth` must be greater than 2x `xsize`.
 * To prevent the jaws overlapping with one another, a jaw cannot be constructed that crosses the
@@ -1499,7 +1500,7 @@ Here, `d1` is a rectangular block 20 cm wide (full width) and 1 mm long in z. `d
 circular disk with diameter 30 cm and length of 1 mm in z. `d3` is 30 cm long in z and
 40 cm width (full width) in x and y with a square shape.
 
-  
+
 solenoid
 ^^^^^^^^
 
@@ -1638,7 +1639,7 @@ Examples: ::
     GAP1: gap, l=0.25*m, angle=0.01*rad;
 
 .. _element-crystal-col:
-    
+
 crystalcol
 ^^^^^^^^^^
 
@@ -2093,6 +2094,159 @@ Examples: ::
 +-------------------------+--------------------------------------------------------------------+
 
 
+.. _component-bmcol:
+
+bmcol
+^^^^^
+
+.. figure:: figures/bmcol.png
+	    :width: 60%
+	    :align: center
+
+`bmcol` define a beam mask that can be placed in a place in a dispersive section of a beamline in order to separate the
+beam with respect to the energy dispersion of said beam. This mask features two slits (a main slit and a side slit)
+with adjustable sizes and positions.
+
+* The main slit is always centered on the beam mask mount. The side slit position is defined is defined with respect to
+  the main one and can be tilted.
+* The whole mount can then have x and y offset inside of the beam pipe.
+
+.. tabularcolumns:: |p{4cm}|p{4cm}|p{2cm}|p{2cm}|
+
++-------------------+------------------------------------------------+----------------+---------------+
+| **Parameter**     | **Description**                                | **Default**    | **Required**  |
++===================+================================================+================+===============+
+| `l`               | Length [m]                                     | 0              | Yes           |
++-------------------+------------------------------------------------+----------------+---------------+
+| `material`        | Outer material                                 | None           | Yes           |
++-------------------+------------------------------------------------+----------------+---------------+
+| `horizontalWidth` | Outer full width [m]                           | 0.15 m         | No            |
++-------------------+------------------------------------------------+----------------+---------------+
+| `xsize`           | Horizontal half aperture of main slit [m]      | 0              | No            |
++-------------------+------------------------------------------------+----------------+---------------+
+| `ysize`           | Vertical half aperture of main slit [m]        | 0              | No            |
++-------------------+------------------------------------------------+----------------+---------------+
+| `xsize2`          | Horizontal half aperture of side slit [m]      | 0              | No            |
++-------------------+------------------------------------------------+----------------+---------------+
+| `ysize2`          | Vertical half aperture of side slit [m]        | 0              | No            |
++-------------------+------------------------------------------------+----------------+---------------+
+| `offsetX2`        | Horizontal displacement of side slit [m]       | 0              | No            |
++-------------------+------------------------------------------------+----------------+---------------+
+| `offsetY2`        | Vertical displacement of side slit [m]         | 0              | No            |
++-------------------+------------------------------------------------+----------------+---------------+
+| `tilt2`           | Clockwise rotation of side slit [rad].         | 0              | No            |
++-------------------+------------------------------------------------+----------------+---------------+
+| `outerShape`      | Shape of the outer material                    | 'rectangular'  | No            |
+|                   | (circular or rectangular).                     |                |               |
++-------------------+------------------------------------------------+----------------+---------------+
+
+Notes:
+
+* The :ref:`aperture-parameters` may also be specified.
+* The :ref:`offsets-and-tilts` may also be specified.
+
+Examples: ::
+
+  bm: bmcol, l=2*mm, aper1=0.15*m, horizontalWidth=0.15*m, material="G4_W",
+             offsetX=0*mm, offsetY=0*mm, xsize=5*mm, ysize=30*mm, outerShape="rectangular",
+             offsetX2=20*mm, offsetY2=0*mm, xsize2=1*mm, ysize2=30*mm, tilt2=0.3*rad;
+
+
+.. _component-gascap:
+
+gascap
+^^^^^^
+
+.. figure:: figures/gascap.png
+	    :width: 60%
+	    :align: center
+
+`gascap` define a gas capillary that can be used to perform beam-gas interaction and/or plasma wake field acceleration.
+This element is composed of an innner cylindrical material (usually it is gas), an outer capillary material and two
+electrodes on each sides (with respect to beam axis).
+
+* The inner gas cell is always center on the beam axis.
+* The electrodes have the same shape and thickness.
+
+.. tabularcolumns:: |p{4cm}|p{4cm}|p{2cm}|p{2cm}|
+
++---------------------+----------------------------------------------+----------------+---------------+
+| **Parameter**       | **Description**                              | **Default**    | **Required**  |
++=====================+==============================================+================+===============+
+| `l`                 | Length [m]                                   | 0              | Yes           |
++---------------------+----------------------------------------------+----------------+---------------+
+| `layerMaterials`    | List of materials in order :                 | None           | Yes           |
+|                     | {Outer, Inner, Electrodes}                   |                |               |
++---------------------+----------------------------------------------+----------------+---------------+
+| `horizontalWidth`   | Outer full width [m]                         | 0.15 m         | No            |
++---------------------+----------------------------------------------+----------------+---------------+
+| `xsize`             | Diameter of inner material [m]               | 0              | No            |
++---------------------+----------------------------------------------+----------------+---------------+
+| `materialThickness` | Thickness of the two electrodes on each sides| 0              | No            |
+|                     | [m]                                          |                |               |
++---------------------+----------------------------------------------+----------------+---------------+
+| `outerShape`        | Shape of the outer material                  | 'rectangular'  | No            |
+|                     | (circular or rectangular).                   |                |               |
++---------------------+----------------------------------------------+----------------+---------------+
+
+Notes:
+
+* The :ref:`aperture-parameters` may also be specified.
+
+Examples: ::
+
+  gc: gascap, l=0.5*m, aper1=0.15*m, horizontalWidth=0.1*m, xsize=0.03*m, outerShape="circular",
+              layerMaterials={"G4_Si", "G4_Xe" ,"G4_C"}, materialThickness=0.01*m;
+
+
+.. _component-gasjet:
+
+gasjet
+^^^^^^
+
+.. figure:: figures/gasjet.png
+	    :width: 60%
+	    :align: center
+
+`gasjet` define a gas jet that can be used to perform beam-gas interaction inside a beam pipe. This element is a box of
+material that can be placed in x and y and angled in all directions with respect to the center of the beam pipe.
+
+* The gas jet size is independent of the beam pipe length. However its position is dependent to the center of the pipe
+  along the beam axis.
+
+.. tabularcolumns:: |p{4cm}|p{4cm}|p{2cm}|p{2cm}|
+
++-------------------+----------------------------+----------------+---------------+
+| **Parameter**     | **Description**            | **Default**    | **Required**  |
++===================+============================+================+===============+
+| `l`               | Length [m]                 | 0              | Yes           |
++-------------------+----------------------------+----------------+---------------+
+| `material`        | Material of the jet        | None           | Yes           |
++-------------------+----------------------------+----------------+---------------+
+| `xdir`            | Size along x axis [m]      | 0              | No            |
++-------------------+----------------------------+----------------+---------------+
+| `ydir`            | Size along y axis [m]      | 0              | No            |
++-------------------+----------------------------+----------------+---------------+
+| `zdir`            | Size along z axis [m]      | 0              | No            |
++-------------------+----------------------------+----------------+---------------+
+| `phi`             | Angle along x axis [rad]   | 0              | No            |
++-------------------+----------------------------+----------------+---------------+
+| `theta`           | Angle along y axis [rad]   | 0              | No            |
++-------------------+----------------------------+----------------+---------------+
+| `psi`             | Angle along z axis [rad]   | 0              | No            |
++-------------------+----------------------------+----------------+---------------+
+
+Notes:
+
+* The :ref:`aperture-parameters` may also be specified.
+* The :ref:`offsets-and-tilts` may also be specified.
+
+Examples: ::
+
+  gj: gasjet, l=0.15*m, aper1=0.15*m, material="G4_AIR", offsetX=0*m, offsetY=0*m,
+              xdir=0.07*m, ydir=0.07*m, zdir=0.01*m, phi=0, theta=1, psi=0;
+
+
 .. _offsets-and-tilts:
 
 Offsets & Tilts - Component Misalignment
@@ -2382,7 +2536,7 @@ volumes in the BLM.
 
 .. note:: If multiple BLMs use the same external geometry file, the biasing
 	  will be applied to all of them as there is only one copy of the geometry in memory.
-  
+
 +-------------------------+--------------------------------------------------------------------+
 | **Parameter**           |  **Description**                                                   |
 +-------------------------+--------------------------------------------------------------------+
@@ -2561,7 +2715,7 @@ Examples
 2) A simple cylinder made of silicon. It's placed globally with an offset in x of 3.2 m and y of 25 cm.
 
    ::
-      
+
       minidetector: blm, x=3.2*m, y=0.25*m,
 	      	    geometryType="cylinder",
 		    blmMaterial="Si",
@@ -2571,7 +2725,7 @@ Examples
 3) User defined geometry in a GDML file.
 
    ::
-      
+
       blmdose: scorer, type="depositedenery";
       minidetector: blm, x=0.4*m, y=0.25*m,
                     geometryFile="gdml:simpleshape.gdml",
