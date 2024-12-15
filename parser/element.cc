@@ -160,7 +160,7 @@ void Element::PublishMembers()
   publish("offsetX2",          &Element::offsetX2);
   publish("offsetY2",          &Element::offsetY2);
   publish("tilt2",             &Element::tilt2);
-  publish("outerShape",        &Element::tilt2);
+  publish("outerShape",        &Element::outerShape);
 
   // screen parameters
   publish("tscint",          &Element::tscint);
