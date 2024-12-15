@@ -1,4 +1,4 @@
-gc: gascap, l=0.5*m, aper1=0.15*m, horizontalWidth=0.1*m, xsize=0.03*m, cavityModel="rectangular",
+gc: gascap, l=0.5*m, aper1=0.15*m, horizontalWidth=0.1*m, xsize=0.03*m, outerShape="circular",
             layerMaterials={"G4_Si", "G4_Xe" ,"G4_C"}, materialThickness=0.01*m;
 
 lat: line = (gc);

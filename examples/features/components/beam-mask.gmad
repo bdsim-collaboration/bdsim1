@@ -1,4 +1,4 @@
-bm: bmcol, l=2*mm, aper1=0.15*m, horizontalWidth=0.15*m, material="G4_W",
+bm: bmcol, l=2*mm, aper1=0.15*m, horizontalWidth=0.15*m, material="G4_W", outerShape="rectangular",
            offsetX=0*mm, offsetY=0*mm, xsize=5*mm, ysize=30*mm,
            offsetX2=20*mm, offsetY2=0*mm, xsize2=1*mm, ysize2=30*mm, tilt2=0.3*rad;
 
