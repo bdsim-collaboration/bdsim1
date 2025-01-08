@@ -4,7 +4,7 @@
 Support
 *******
 
-All support issues can be submitted to our `issue tracker <https://bitbucket.org/jairhul/bdsim/issues?status=new&status=open>`_.
+All support issues can be submitted to our `issue tracker <https://github.com/bdsim-collaboration/bdsim/issues>`_.
 
 BDSIM News Letter
 -----------------
@@ -18,7 +18,7 @@ Trouble Running BDSIM
 ---------------------
 
 For trouble with installation or running, see the :ref:`Troubleshooting` section. Bugs can be submitted to the
-`issue tracker <https://bitbucket.org/jairhul/bdsim/issues?status=new&status=open>`_.
+`issue tracker <https://github.com/bdsim-collaboration/bdsim/issues>`_.
 Please have a look at the existing
 `list of open bugs <https://bitbucket.org/jairhul/bdsim/issues?status=new&status=open&status=on+hold&kind=bug>`_ before
 submitting a new one.

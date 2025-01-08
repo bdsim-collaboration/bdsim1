@@ -150,7 +150,7 @@ uses some docker commands.
 To use this, do the following:
 
 1) Download the DockerDesktop application (e.g. `<https://www.docker.com/products/docker-desktop>`_).
-2) Clone the BDSIM git repository: :code:`git clone https://bitbucket.org/jairhul/bdsim`.
+2) Clone the BDSIM git repository: :code:`git clone https://github.com/bdsim-collaboration/bdsim`.
 3) In a terminal (unix or Cygwin), go to :code:`bdsim/building/docker`.
 4) Use the docker build script :code:`source build-centos-bdsim.sh` - this may take 20 mins. (\*)
 5) Adapt and use the run script :code:`run-centos-bdsim.sh` which is made for Mac / unix.
@@ -233,7 +233,7 @@ GIT Repository
 
 To download the source from the git repository, use the command::
 
-  git clone --recursive https://bitbucket.org/jairhul/bdsim
+  git clone --recursive https://github.com/bdsim-collaboration/bdsim
 
 This will create a directory called ``bdsim``, inside which all the code, examples
 and documentation is provided. Also, the Python utilities that come with BDSIM will be present
@@ -244,7 +244,7 @@ Archive
 
 BDSIM source code versions can be downloaded as zipped archives from the git repository website:
 
-https://bitbucket.org/jairhul/bdsim/downloads/?tab=tags
+https://github.com/bdsim-collaboration/bdsim/tags
 
 .. note:: If you download a branch such as develop.tar.gz then it is not a git repository but just
 	  a copy of the files. In the case of the develop branch, the BDSIM version recorded in the

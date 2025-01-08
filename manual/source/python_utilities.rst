@@ -48,6 +48,6 @@ and overlap checking outside Geant4. The emitted GDML files can then be loaded i
 It can also be used to composite STL, GDML, Python defined geometry, FLUKA geometry into one.
 See:
 
- * `<http://www.pp.rhul.ac.uk/bdsim/pyg4ometry>`_
- * `<https://bitbucket.org/jairhul/pyg4ometry>`_
+ * `<https://pyg4ometry.readthedocs.io/en/stable/>`_
+ * `<https://github.com/g4edge/pyg4ometry>`_
 
