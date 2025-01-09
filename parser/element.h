@@ -129,6 +129,12 @@ namespace GMAD
     double offsetX; ///< offset X
     double offsetY; ///< offset Y
 
+    // PWFA
+    double xsize2, ysize2; ///< size of the beam mask second aperture
+    double offsetX2, offsetY2; ///< offset of the beam mask second aperture
+    double tilt2; ///< tilt of the beam mask second aperture
+    std::string outerShape; ///< 'rectangular' or 'circular'. used in gascap and bmcol
+
     // screen parameters
     double tscint; ///<thickness of scintillating part of screen
     double twindow; ///<thickness of window
@@ -189,11 +195,14 @@ namespace GMAD
     std::string bias;
     std::string biasMaterial;
     std::string biasVacuum;
+    std::string biasMaterialLV;
     ///@}
     /// physics biasing list for the material
     std::list<std::string> biasMaterialList;
     /// physics biasing list for the vacuum
     std::list<std::string> biasVacuumList;
+    /// physics biasing list for specific LVs
+    std::list<std::string> biasMaterialLVList;
 
     /// minimum kinetic energy for user limits - respected on element by element basis
     double minimumKineticEnergy;

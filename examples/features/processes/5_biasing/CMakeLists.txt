@@ -8,6 +8,7 @@ simple_testing(physics-biasing-repeated             "--file=biasing-repeated.gma
 simple_testing(physics-biasing-repeated2            "--file=biasing-repeated2.gmad"  "")
 simple_testing(physics-biasing-repeated3            "--file=biasing-repeated3.gmad"  "")
 simple_testing(physics-biasing-world-air            "--file=biasing-world-air.gmad"  "")
+simple_testing(physics-biasing-logical-volume       "--file=biasing-logical-volume.gmad"  "")
 simple_fail(physics-biasing-bad-flag                "--file=bad-biasing-flag.gmad"   "")
 if (USE_GDML)
   simple_testing(physics-biasing-gdml-named-vacuum    "--file=gdmlVacuumVolumeBiasing.gmad" "")

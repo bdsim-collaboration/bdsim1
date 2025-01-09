@@ -84,6 +84,9 @@ include(cmake/DCMTK.cmake)
 # AWAKE
 include(modules/AWAKE.cmake)
 
+# PLASMA_HDF5
+include(modules/PLASMA_HDF5.cmake)
+
 # GDML (on by default)
 option( USE_GDML "Include GDML support."  ON )
 if(USE_GDML)
@@ -183,6 +186,11 @@ if (USE_AWAKE)
   file(GLOB awake_sources "${CMAKE_CURRENT_SOURCE_DIR}/modules/AWAKE/src/*.cc")
   list(APPEND bdsim_sources ${awake_sources})
 endif()
+if (USE_PLASMA_HDF5)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/modules/PLASMA_HDF5/include)
+  file(GLOB plasma_hdf5_sources "${CMAKE_CURRENT_SOURCE_DIR}/modules/PLASMA_HDF5/src/*.cc")
+  list(APPEND bdsim_sources ${plasma_hdf5_sources})
+endif()
 
 if($ENV{VERBOSE})
   message(STATUS "ROOT dictionaries ${root_dicts}")
@@ -220,6 +228,9 @@ if (USE_GDML)
 endif()
 target_link_libraries(${BDSIM_LIB_NAME} gmad)
 generate_export_header(${BDSIM_LIB_NAME})
+if (USE_PLASMA_HDF5)
+  target_link_libraries(${BDSIM_LIB_NAME} ${HDF5_CXX_LIBRARIES})
+endif()
 
 add_executable(bdsimExec ${CMAKE_BINARY_DIR}/bdsim.cc)
 

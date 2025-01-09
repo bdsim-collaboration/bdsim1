@@ -111,6 +111,9 @@ solenoid { return SOLENOID; }
 rcol { return RCOL;}
 ecol { return ECOL; } 
 jcol { return JCOL; }
+bmcol { return BMCOL; }
+gascap { return GASCAP; }
+gasjet { return GASJET; }
 muonspoiler { return MUONSPOILER; }
 muspoiler { return MUONSPOILER; }
 shield {return SHIELD; }

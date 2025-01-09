@@ -2272,7 +2272,8 @@ only one proton definition.
 .. note:: This only works with Geant4 version 10.1 or higher. It does not work Geant4.10.3.X series.
 
 1) Define a bias object with parameters in following table.
-2) Use :code:`bias`, :code:`biasMaterial` or :code:`biasVacuum` in an element definition naming the bias object.
+2) Use :code:`bias`, :code:`biasMaterial`, :code:`biasMaterialLV` or :code:`biasVacuum` in an element definition
+   naming the bias object.
 
 .. tabularcolumns:: |p{3cm}|p{10cm}|
    
@@ -2320,16 +2321,21 @@ Example::
 
 The process can also be attached to a specific element using the keywords :code:`biasVacuum` or
 :code:`biasMaterial` for the biasing to be attached the vacuum volume or everything outside the
-vacuum respectively::
+vacuum respectively. Alternatively the process can be attached to a specific logical volume of an element
+by using the keyword :code:`biasMaterialLV`::
 
   q1: quadrupole, l=1*m, material="Iron", biasVacuum="biasDef1 biasDef2"; ! uses the process biasDef1 and biasDef2
   q2: quadrupole, l=0.5*m, biasMaterial="biasDef2";
   q3: quadrupole, l=20*cm, k1=0.25, bias="biasDef1";
+  q4: quadrupole, l=20*cm, k1=0.25, biasMaterialLV="container:biasDef1";
 
 * :code:`biasVacuum` applies to "vacuum" parts of beam line elements, i.e. the
   inner volume of a beam pipe only in each component.
 * :code:`biasMaterial` applies to all volumes that are not the vacuum. This includes
   the beam pipe itself.
+* :code:`biasMaterialLV` looks in the logical volumes whose name contains a specific string (in the example it is
+  'container') and applies the bias to it. If multiple physical volumes are placed from the same logical volume
+  they will all be biased.
 * :code:`bias` applies to both the bias vacuum and material parts.
 * If both :code:`bias` and one or both of :code:`biasVacuum` and :code:`biasMaterial` are used
   then the effect is cumulative. :code:`bias` is just a way to add to both vacuum and material.
@@ -2342,7 +2348,8 @@ vacuum respectively::
 
 Defaults can be set with the options :code:`defaultBiasVacuum` and :code:`defaultBiasMaterial`. Only
 in the case where a beam line element has no biasing specified will these bias objects be applied.
-They will not be mixed with per-element definitions.
+They will not be mixed with per-element definitions. Using :code:`defaultBiasMaterial` impact both :code:`biasMaterial`
+and :code:`biasMaterialLV`.
 
 * The world logical volume (only, i.e. excluding any daughters) can be biased with the option
   :code:`biasForWorldVolume`.

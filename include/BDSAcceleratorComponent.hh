@@ -117,6 +117,8 @@ public:
   {biasVacuumList = biasVacuumListIn;}
   virtual void SetBiasMaterialList(const std::list<std::string>& biasMaterialListIn)
   {biasMaterialList = biasMaterialListIn;}
+  virtual void SetBiasMaterialLVList(const std::list<std::string>& biasMaterialLVListIn)
+  {biasMaterialLVList = biasMaterialLVListIn;}
   /// @}
   
   /// Set the region name for this component.
@@ -196,6 +198,7 @@ public:
   /// @{ Access the bias list copied from parser
   std::list<std::string> GetBiasVacuumList()   const {return biasVacuumList;}
   std::list<std::string> GetBiasMaterialList() const {return biasMaterialList;}
+  std::list<std::string> GetBiasMaterialLVList() const {return biasMaterialLVList;}
   /// @}
   
   /// Whether this component has an optional end piece that should be placed
@@ -306,6 +309,7 @@ private:
   /// @{ Copy of bias list from parser for this particular component.
   std::list<std::string> biasVacuumList;
   std::list<std::string> biasMaterialList;
+  std::list<std::string> biasMaterialLVList;
   /// @}
   
   G4ThreeVector inputFaceNormal;  ///< Input face unit normal vector in incoming reference coordinate frame.

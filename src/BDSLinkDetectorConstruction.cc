@@ -116,6 +116,7 @@ G4VPhysicalVolume* BDSLinkDetectorConstruction::Construct()
       
       std::set<GMAD::ElementType> acceptedTypes = {GMAD::ElementType::_ECOL,
 						   GMAD::ElementType::_RCOL,
+                           GMAD::ElementType::_BMCOL,
 						   GMAD::ElementType::_JCOL,
 						   GMAD::ElementType::_CRYSTALCOL,
 						   GMAD::ElementType::_ELEMENT};

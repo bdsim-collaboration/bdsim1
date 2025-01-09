@@ -1397,6 +1397,20 @@ with the following fractions:
 
 It is a gas with density of 1.20479 mg/cm3.
 
+Ideal gases
+^^^^^^^^^^^
+
+When a new material is added with the parameter :code:`state=gas`, BDSIM check if the ideal gas law is respected between
+the density, pressure and temperature. It is assumed that the density is correct as it is the parameter Geant4 cares
+about. If the ideal gas law isn't respected, the temperature is defaulted to :code:`T=300` and the pressure is calculated from
+the density.
+
+.. note:: This check does not apply to :ref:`predefined-materials` and other materials defined above.
+
+.. note:: Molar mass calculations can't distinguish between single atom elements and elements with multiple of the same
+    atom (oxygen and dioxygen for example). This ideal gas calculation is intended for the former case like with
+    noble gases.
+
 .. _aperture-parameters:
 
 Aperture Parameters

@@ -113,6 +113,12 @@ Parameters::Parameters()
   setMap["xsizeRight"]         = false;
   setMap["offsetX"]            = false;
   setMap["offsetY"]            = false;
+  setMap["xsize2"]             = false;
+  setMap["ysize2"]             = false;
+  setMap["offsetX2"]           = false;
+  setMap["offsetY2"]           = false;
+  setMap["tilt2"]              = false;
+  setMap["outerShape"]         = false;
   
   setMap["tscint"]             = false;
   setMap["twindow"]            = false;
@@ -165,6 +171,7 @@ Parameters::Parameters()
   setMap["bias"]                 = false;
   setMap["biasMaterial"]         = false;
   setMap["biasVacuum"]           = false;
+  setMap["biasMaterialLV"]         = false;
   
   setMap["minimumKineticEnergy"] = false;
   

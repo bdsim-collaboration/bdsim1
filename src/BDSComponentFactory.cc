@@ -28,6 +28,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSCollimatorElliptical.hh"
 #include "BDSCollimatorJaw.hh"
 #include "BDSCollimatorRectangular.hh"
+#include "BDSCollimatorBeamMask.hh"
 #include "BDSColours.hh"
 #include "BDSColourFromMaterial.hh"
 #include "BDSComponentFactoryUser.hh"
@@ -76,6 +77,8 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSFieldType.hh"
 #include "BDSGlobalConstants.hh"
 #include "BDSGap.hh"
+#include "BDSGasCapillary.hh"
+#include "BDSGasJet.hh"
 #include "BDSIntegratorSet.hh"
 #include "BDSIntegratorSetType.hh"
 #include "BDSIntegratorType.hh"
@@ -361,6 +364,12 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateComponent(Element const* ele
       {component = CreateEllipticalCollimator(); break;}
     case ElementType::_RCOL:
       {component = CreateRectangularCollimator(); break;}
+    case ElementType::_BMCOL:
+      {component = CreateBeamMaskCollimator(); break;}
+    case ElementType::_GASCAP:
+      {component = CreateGasCapillary(); break;}
+    case ElementType::_GASJET:
+      {component = CreateGasJet(); break;}
     case ElementType::_TARGET:
       {component = CreateTarget(); break;}
     case ElementType::_JCOL:
@@ -453,6 +462,7 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateComponent(Element const* ele
     {
       component->SetBiasVacuumList(element->biasVacuumList);
       component->SetBiasMaterialList(element->biasMaterialList);
+      component->SetBiasMaterialLVList(element->biasMaterialLVList);
       component->SetRegion(element->region);
       // the minimum kinetic energy is only implemented in certain components
       component->SetMinimumKineticEnergy(element->minimumKineticEnergy*CLHEP::GeV);
@@ -464,6 +474,7 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateComponent(Element const* ele
 	case ElementType::_ECOL:
 	case ElementType::_RCOL:
 	case ElementType::_JCOL:
+    case ElementType::_BMCOL:
 	  {
 	    if (BDSGlobalConstants::Instance()->CollimatorsAreInfiniteAbsorbers())
 	      {component->SetMinimumKineticEnergy(std::numeric_limits<double>::max());}
@@ -1451,6 +1462,76 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateRectangularCollimator()
 				      element->ysizeOut*CLHEP::m,
 				      PrepareColour(element, material),
 				      circularOuter);
+}
+
+BDSAcceleratorComponent* BDSComponentFactory::CreateBeamMaskCollimator()
+{
+  if (!HasSufficientMinimumLength(element))
+  {return nullptr;}
+  G4bool circularOuter = false;
+  G4String outerShape = G4String(element->outerShape);
+  if (outerShape == "circular")
+  {circularOuter = true;}
+  return new BDSCollimatorBeamMask(elementName,
+                                   element->l*CLHEP::m,
+                                   PrepareBeamPipeInfo(element),
+                                   PrepareHorizontalWidth(element, 0.15*CLHEP::m),
+                                   PrepareMaterial(element),
+                                   PrepareVacuumMaterial(element),
+                                   element->xsize*CLHEP::m,
+                                   element->ysize*CLHEP::m,
+                                   element->xsize2*CLHEP::m,
+                                   element->ysize2*CLHEP::m,
+                                   element->offsetX*CLHEP::m,
+                                   element->offsetY*CLHEP::m,
+                                   element->offsetX2*CLHEP::m,
+                                   element->offsetY2*CLHEP::m,
+                                   element->tilt2*CLHEP::rad,
+                                   PrepareColour(element),
+                                   circularOuter);
+}
+
+BDSAcceleratorComponent* BDSComponentFactory::CreateGasCapillary()
+{
+  if (!HasSufficientMinimumLength(element))
+  {return nullptr;}
+
+  G4bool circularOuter = false;
+  G4String outerShape = G4String(element->outerShape);
+  if (outerShape == "circular")
+  {circularOuter = true;}
+
+  std::vector<std::string> materials{ element->layerMaterials.begin(), element->layerMaterials.end() };
+
+  return new BDSGasCapillary(elementName,
+                             element->l*CLHEP::m,
+                             PrepareBeamPipeInfo(element),
+                             PrepareHorizontalWidth(element, 0.15*CLHEP::m),
+                             BDSMaterials::Instance()->GetMaterial(materials[0]),
+                             BDSMaterials::Instance()->GetMaterial(materials[1]),
+                             BDSMaterials::Instance()->GetMaterial(materials[2]),
+                             element->xsize*CLHEP::m,
+                             element->materialThickness*CLHEP::m,
+                             circularOuter);
+}
+
+BDSAcceleratorComponent* BDSComponentFactory::CreateGasJet()
+{
+  if (!HasSufficientMinimumLength(element))
+  {return nullptr;}
+
+  return new BDSGasJet(elementName,
+                       element->l*CLHEP::m,
+                       PrepareBeamPipeInfo(element),
+                       PrepareMaterial(element),
+                       element->xdir*CLHEP::m,
+                       element->ydir*CLHEP::m,
+                       element->zdir*CLHEP::m,
+                       element->phi*CLHEP::m,
+                       element->theta*CLHEP::m,
+                       element->psi*CLHEP::m,
+                       element->offsetX*CLHEP::m,
+                       element->offsetY*CLHEP::m);
 }
 
 BDSAcceleratorComponent* BDSComponentFactory::CreateTarget()

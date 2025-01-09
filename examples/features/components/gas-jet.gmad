@@ -1,0 +1,8 @@
+gj: gasjet, l=0.15*m, aper1=0.15*m, material="G4_AIR", offsetX=0*m, offsetY=0*m,
+            xdir=0.07*m, ydir=0.07*m, zdir=0.01*m, phi=0, theta=1, psi=0;
+
+lat: line = (gj);
+use, lat;
+
+beam, particle="e-",
+      energy=1*GeV;

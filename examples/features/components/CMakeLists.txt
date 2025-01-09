@@ -2,6 +2,7 @@
 add_subdirectory(dipoles)
 
 # standard components
+simple_testing(component-beam-mask           "--file=beam-mask.gmad"       ${OVERLAP_CHECK})
 simple_testing(component-csampler            "--file=csampler.gmad"        ${OVERLAP_CHECK})
 simple_testing(component-crystal-no-phys     "--file=crystalcol-no-phys.gmad" ${OVERLAP_CHECK})
 simple_testing(component-decapole            "--file=decapole.gmad"        ${OVERLAP_CHECK})
@@ -10,7 +11,9 @@ simple_testing(component-drift               "--file=drift.gmad"           ${OVE
 simple_testing(component-dump                "--file=dump.gmad"            ${OVERLAP_CHECK})
 simple_testing(component-ecol                "--file=ecol.gmad"            ${OVERLAP_CHECK})
 # (REMOVED) simple_testing(component-ecol-tapered        "--file=ecol_tapered.gmad"    ${OVERLAP_CHECK})
-simple_testing(component-gap                 "--file=gap.gmad"             ${OVERLAP_CHECK})	
+simple_testing(component-gap                 "--file=gap.gmad"             ${OVERLAP_CHECK})
+simple_testing(component-gas-capillary       "--file=gas-capillary.gmad"   ${OVERLAP_CHECK})
+simple_testing(component-gas-jet             "--file=gas-jet.gmad"         ${OVERLAP_CHECK})
 simple_testing(component-hkicker             "--file=hkicker.gmad"         ${OVERLAP_CHECK})
 simple_testing(component-hkicker-fringe      "--file=hkicker_fringe.gmad"  ${OVERLAP_CHECK})
 simple_testing(component-jcol                "--file=jcol.gmad"            ${OVERLAP_CHECK})

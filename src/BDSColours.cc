@@ -93,6 +93,7 @@ BDSColours::BDSColours()
   colours["jcol"]             = colours["collimator"];
   colours["rcol"]             = colours["collimator"];
   colours["jcol"]             = colours["collimator"];
+  colours["bmcol"]            = colours["collimator"];
   colours["target"]           = colours["collimator"];
   colours["muonspoiler"]      = new G4Colour(0,     0.807, 0.819); // "light blue" / tab blue
   colours["vkicker"]          = new G4Colour(0.73,  0.33,  0.83);  // blue
@@ -132,6 +133,9 @@ BDSColours::BDSColours()
   colours["LHCyokered"]       = new G4Colour(*(colours["quadrupole"]));// quadrupole red
   colours["gdml"]             = new G4Colour(0.4,   0.2,   0);     // poo brown
   colours["screenframe"]      = new G4Colour(0.7,   0.7,   0.7, 0.4);// light grey, semi-transparent
+  colours["capillaryouter"]   = colours["collimator"];
+  colours["capillarygas"]    = new G4Colour(0.82,  0.1,   0.1, 0.4); // red, semi-transparent
+  colours["electrode"]        = colours["screen"];
 
   // general
   colours["white"]   = new G4Colour(G4Colour::White());

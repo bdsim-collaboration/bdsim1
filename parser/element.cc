@@ -149,10 +149,18 @@ void Element::PublishMembers()
   publish("ysizeOut",         &Element::ysizeOut);
   publish("xsizeLeft",        &Element::xsizeLeft);
   publish("xsizeRight",       &Element::xsizeRight);
-  publish("offsetX",     &Element::offsetX);
-  publish("offsetY",     &Element::offsetY);
-  publish("jawTiltLeft",     &Element::jawTiltLeft);
+  publish("offsetX",          &Element::offsetX);
+  publish("offsetY",          &Element::offsetY);
+  publish("jawTiltLeft",      &Element::jawTiltLeft);
   publish("jawTiltRight",     &Element::jawTiltRight);
+
+  // PWFA
+  publish("xsize2",            &Element::xsize2);
+  publish("ysize2",            &Element::ysize2);
+  publish("offsetX2",          &Element::offsetX2);
+  publish("offsetY2",          &Element::offsetY2);
+  publish("tilt2",             &Element::tilt2);
+  publish("outerShape",        &Element::outerShape);
 
   // screen parameters
   publish("tscint",          &Element::tscint);
@@ -218,6 +226,7 @@ void Element::PublishMembers()
   publish("bias",                &Element::bias);
   publish("biasMaterial",        &Element::biasMaterial);
   publish("biasVacuum",          &Element::biasVacuum);
+  publish("biasMaterialLV",      &Element::biasMaterialLV);
 
   publish("minimumKineticEnergy",&Element::minimumKineticEnergy);
 
@@ -329,6 +338,7 @@ void Element::print(int ident) const
       }
     case ElementType::_ECOL:
     case ElementType::_RCOL:
+    case ElementType::_BMCOL:
     case ElementType::_JCOL:
       {
         std::cout << "x half aperture = " << xsize <<" m" << std::endl
@@ -536,6 +546,14 @@ void Element::flush()
   jawTiltLeft = 0;
   jawTiltRight = 0;
 
+  // PWFA
+  xsize2 = 0;
+  ysize2 = 0;
+  offsetX2 = 0;
+  offsetY2 = 0;
+  tilt2 = 0;
+  outerShape = "rectangular";
+
   // screen parameters
   tscint = 0.0003;
   twindow = 0;
@@ -595,8 +613,10 @@ void Element::flush()
   bias         = "";
   biasMaterial = "";
   biasVacuum   = "";
+  biasMaterialLV   = "";
   biasMaterialList.clear();
   biasVacuumList.clear();
+  biasMaterialLVList.clear();
   
   minimumKineticEnergy = 0;
 
@@ -693,6 +713,7 @@ void Element::set(const Parameters& params)
                 {
                   biasMaterialList.push_back(tok);
                   biasVacuumList.push_back(tok);
+                  biasMaterialLVList.push_back(tok);
                 }
             }
           else if (property == "biasMaterial")
@@ -707,6 +728,12 @@ void Element::set(const Parameters& params)
               std::string tok;
               while(ss >> tok) {biasVacuumList.push_back(tok);}
             }
+          else if (property == "biasMaterialLV")
+          {
+            std::stringstream ss(biasMaterialLV);
+            std::string tok;
+            while(ss >> tok) {biasMaterialLVList.push_back(tok);}
+          }
         }
     }
 }
