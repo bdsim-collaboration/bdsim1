@@ -132,6 +132,7 @@ usercomponent { return USERCOMPONENT; }
 dump { return DUMP; }
 ct { return CT; }
 target { return TARGET; }
+gaborlens { return GABORLENS; }
 
 cavitymodel {return CAVITYMODEL; }
 cutsregion { return REGION; }

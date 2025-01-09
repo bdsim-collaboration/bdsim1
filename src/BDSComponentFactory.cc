@@ -39,6 +39,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSDrift.hh"
 #include "BDSDump.hh"
 #include "BDSElement.hh"
+#include "BDSGaborLens.hh"
 #include "BDSLaserWire.hh"
 #include "BDSLine.hh"
 #include "BDSMagnet.hh"
@@ -410,6 +411,8 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateComponent(Element const* ele
       }
     case ElementType::_DUMP:
       {component = CreateDump(); break;}
+    case ElementType::_GABORLENS:
+      {component = CreateGaborLens(); break;}
     case ElementType::_CT:
 #ifdef USE_DICOM
       {component = CreateCT(); break;}
@@ -2027,6 +2030,70 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateCavityFringe(G4double       
   return cavityFringe;
 }
 
+BDSAcceleratorComponent* BDSComponentFactory::CreateGaborLens()
+{
+  if (!HasSufficientMinimumLength(element))
+    {return nullptr;}
+  // force circular vacuum volume
+  BDSBeamPipeInfo* defaultModel = BDSGlobalConstants::Instance()->DefaultBeamPipeModel();
+  BDSBeamPipeInfo* bpInfo = new BDSBeamPipeInfo(defaultModel,
+                                                "circular",
+                                                element->aper1 * CLHEP::m,
+                                                0,0,0,
+                                                element->vacuumMaterial,
+                                                element->beampipeThickness * CLHEP::m,
+                                                element->beampipeMaterial,
+                                                G4ThreeVector(0,0,-1),
+                                                G4ThreeVector(0,0,1));
+
+  const BDSFieldType gaborLensField = BDSFieldType::gaborlens;
+  BDSIntegratorType intType = integratorSet->Integrator(gaborLensField);
+  G4Transform3D fieldTrans  = CreateFieldTransform(element);
+  BDSMagnetStrength* st = new BDSMagnetStrength();
+  (*st)["synchronousT0"] = synchronousTAtMiddleOfThisComponent;
+  SetBeta0(st);
+  (*st)["length"] = element->l * CLHEP::m;
+  CalculateGaborLensStrength(st);
+
+  BDSFieldInfo* vacuumFieldInfo = new BDSFieldInfo(gaborLensField,
+                                                   BRho(),
+                                                   intType,
+                                                   st,
+                                                   true,
+                                                   fieldTrans);
+
+  vacuumFieldInfo->SetModulatorInfo(ModulatorDefinition(element, true));
+
+  G4Material* outerMaterial;
+  if (element->material.empty())
+    {
+      G4String defaultMaterialName = BDSGlobalConstants::Instance()->OuterMaterialName();
+      outerMaterial = BDSMaterials::Instance()->GetMaterial(defaultMaterialName);
+    }
+  else
+    {outerMaterial = BDSMaterials::Instance()->GetMaterial(element->material);}
+
+  // hard coded for anode and electrode
+  G4Material* copper = BDSMaterials::Instance()->GetMaterial("copper");
+
+  auto gaborlens = new BDSGaborLens(elementName,
+                                    element->l*CLHEP::m,
+                                    PrepareHorizontalWidth(element),
+                                    element->anodeLength*CLHEP::m,
+                                    copper,
+                                    element->anodeRadius*CLHEP::m,
+                                    element->anodeThickness*CLHEP::m,
+                                    element->electrodeLength*CLHEP::m,
+                                    copper,
+                                    element->electrodeRadius*CLHEP::m,
+                                    element->electrodeThickness*CLHEP::m,
+                                    outerMaterial,
+                                    PrepareColour(element),
+                                    bpInfo,
+                                    vacuumFieldInfo);
+  return gaborlens;
+}
+
 BDSMagnet* BDSComponentFactory::CreateMagnet(const GMAD::Element* el,
 					     BDSMagnetStrength*   st,
 					     BDSFieldType         fieldType,
@@ -3119,4 +3186,42 @@ void BDSComponentFactory::INDEVELOPMENTERROR() const
 {
   if (!element->fieldModulator.empty())
     {throw BDSException(__METHOD_NAME__, "fieldModulator is currently in development for element \"" + elementName + "\"");}
+}
+
+void BDSComponentFactory::CalculateGaborLensStrength(BDSMagnetStrength* st) const
+{
+  (*st)["kg"] = element->scaling * element->kg / CLHEP::m;  // kg units per m
+  (*st)["field"] = element->scaling * element->B * CLHEP::tesla;
+  (*st)["equatorradius"] = element->anodeRadius*CLHEP::m;
+
+  if ((*st)["kg"] < 0)
+    {throw BDSException(__METHOD_NAME__, "kg strength cannot be negative for element \"" + elementName + "\"");}
+  if (!BDS::IsFinite((*st)["kg"]) && ((*st)["field"] < 0))
+    {throw BDSException(__METHOD_NAME__, "B field cannot be negative for element \"" + elementName + "\"");}
+
+  const G4double c = CLHEP::c_light;
+  const BDSParticleDefinition& designParticle = integralUpToThisComponent->designParticle;
+  const G4double gamma = designParticle.Gamma();
+  const G4double momentum = designParticle.Momentum();   //  in MeV
+  const G4double mass = designParticle.Mass();   // in MeV
+
+  G4double convFactor = gamma * std::pow(c,2) / (4*std::pow(momentum,2));
+
+  G4double b2 = 0;
+  // set field & kg ahead of later changes
+  if (BDS::IsFinite((*st)["kg"]))
+    {
+      b2 = (*st)["kg"] / convFactor * CLHEP::tesla;
+      (*st)["field"] = std::sqrt(b2) ;
+    }
+  else
+    {
+      b2 = std::pow((*st)["field"],2);
+      (*st)["kg"] = b2 * convFactor / CLHEP::m;
+    }
+
+  // set plasma field as its own magnetStrength key - efield key will be used later for confinement field strength
+  (*st)["plasmaEfield"] = -1.0 * b2 * std::pow(c,2) / (4*mass);
+
+  // TODO: set "efield" and "field" to be electric and magnetic confinement field strengths
 }

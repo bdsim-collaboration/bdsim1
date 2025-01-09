@@ -51,6 +51,7 @@ std::map<BDSFieldType, std::string>* BDSFieldType::dictionary =
       {BDSFieldType::mokka,            	           "mokka"},
       {BDSFieldType::solenoid,         	           "solenoid"},
       {BDSFieldType::solenoidsheet,                "solenoidsheet"},
+      {BDSFieldType::gaborlens,                    "gaborlens"},
       {BDSFieldType::dipole,           	           "dipole"},
       {BDSFieldType::quadrupole,       	           "quadrupole"},
       {BDSFieldType::dipolequadrupole,             "dipolequadrupole"},
@@ -110,6 +111,7 @@ BDSFieldType BDS::DetermineFieldType(G4String bType)
   types["mokka"]            = BDSFieldType::mokka;
   types["solenoid"]         = BDSFieldType::solenoid;
   types["solenoidsheet"]    = BDSFieldType::solenoidsheet;
+  types["gaborlens"]        = BDSFieldType::gaborlens;
   types["dipole"]           = BDSFieldType::dipole;
   types["quadrupole"]       = BDSFieldType::quadrupole;
   types["dipolequadrupole"] = BDSFieldType::dipolequadrupole;

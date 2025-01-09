@@ -74,7 +74,8 @@ public:
 		   BDSIntegratorType rmatrixThinIn,
 		   BDSIntegratorType parallelTransporterIn,
 		   BDSIntegratorType undulator,
-                   BDSIntegratorType cavityFringeIn);
+		   BDSIntegratorType cavityFringeIn,
+		   BDSIntegratorType gaborLens);
 
   /// Get appropriate integrator based on the field type.
   BDSIntegratorType Integrator(const BDSFieldType field) const;
@@ -104,6 +105,7 @@ public:
   BDSIntegratorType parallelTransporter;
   BDSIntegratorType undulator;
   BDSIntegratorType cavityFringe;
+  BDSIntegratorType gaborLens;
 
   /// Accessor for bool of is the integrator set matrix style.
   inline G4bool IsMatrixIntegratorSet() const {return isMatrix;}

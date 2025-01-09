@@ -77,6 +77,7 @@ namespace GMAD
     double phase;     ///< phase of rf cavity (rad)
     double tOffset;   ///< time offset used for phase calculation (ns)
     std::string fieldModulator;
+    double kg; ///< gabor lens
 
     ///@{ rmatrix elements, only 4x4
     double kick1;
@@ -184,7 +185,16 @@ namespace GMAD
     double undulatorGap;
     double undulatorMagnetHeight;
     ///@}
-  
+
+    ///@{ for gabor lens
+    double anodeLength;
+    double anodeRadius;
+    double anodeThickness;
+    double electrodeLength;
+    double electrodeRadius;
+    double electrodeThickness;
+    ///@}
+
     ///@{ temporary string for bias setting
     std::string bias;
     std::string biasMaterial;

@@ -216,6 +216,7 @@ The following elements may be defined
 * `gap`_
 * `crystalcol`_
 * `undulator`_
+* `gaborlens`_
 * `transform3d`_
 * `rmatrix`_
 * `thinrmatrix`_
@@ -758,7 +759,7 @@ decapole
 
 .. math::
 
-   k_{2} = \frac{1}{B \rho}\,\frac{d^{4}B_{y}}{dx^{4}}\,[m^{-5}]
+   k_{4} = \frac{1}{B \rho}\,\frac{d^{4}B_{y}}{dx^{4}}\,[m^{-5}]
 
 ================  ===========================  ==========  ===========
 Parameter         Description                  Default     Required
@@ -1515,6 +1516,10 @@ is a perfect dipole field along the local :math:`z` axis inside the beam pipe wi
 no spatial variation. Outside the beam pipe, in the *'yoke'*, a solenoidal field
 according to a cylindrical current source is constructed.
 
+.. math::
+
+   ks = \frac{B_0}{B \rho}\,[m^{-1}]
+
 =================  ============================  ==========  ===========
 Parameter          Description                   Default     Required
 `l`                Length [m]                    0           Yes
@@ -1759,6 +1764,100 @@ Examples: ::
 
  u1: undulator, l=2.0*m, B=0.1*T, undulatorPeriod=0.2*m;
  u2: undulator, l=3.2*m, B=0.02*T, undulatorPeriod=0.16*m, undulatorGap=15*cm, undulatorMagnetHeight=10*cm;
+
+gaborlens
+^^^^^^^^^
+
+.. figure:: figures/gaborlens.png
+	    :width: 60%
+	    :align: center
+
+`gaborlens` defines a Gabor lens that provides a radially focusing electric field from a confined electron plasma in
+a Penning-Malmberg trap configuration. The lens' radial electric field along the element has field components:
+
+.. math::
+
+   E_{x} ~ &= ~ - \frac{B^2 c^2}{4\ m_p} x \\
+   E_{y} ~ &= ~ - \frac{B^2 c^2}{4\ m_p} y \\
+   E_{z} ~ &= ~ 0 \\
+
+where :math:`B` is the magnetic field of an equivalent strength solenoid, and :math:`m_p` is the beam particle
+mass. The field is internally calculated from the Gabor lens focusing parameter `Kg`, defined as
+
+.. math::
+
+   k_{G} = \frac{e}{2 \epsilon_0} \frac{m_p\ \gamma}{p^2} n_e
+
+where :math:`e` is the electron charge, :math:`\epsilon_0` is the permittivity of free space, :math:`m_p` is the beam
+particle mass, :math:`\gamma` is the beam particle Lorentz factor, :math:`p` is the beam particle momentum, and
+:math:`n_e` is the electron plasma density. It is assumed that the electron density in uniform. The Gabor lens plasma
+density depends on the strength of the electric and magnetic confinement fields that confine the plasma axially and
+radially respectively. The nominal electron density :math:`n_e` is achieved assuming the maximum axial and radial
+densities are in equilibrium. It is assumed in the `gaborlens` element that this equilibrium condition is met.
+
+.. note:: The electric and magnetic confinement fields are not constructed in the `gaborlens` element at present.
+
+The Gabor lens geometry is based upon a prototype design by Imperial College. The details of the lens are described
+in `<https://doi.org/10.3390/app11104357>`_. The internal structure of a Gabor lens is shown below. The main components
+are:
+
+1) The outer tube
+2) Solenoid coils (copper)
+3) Vacuum tube
+4) A cylindrical central copper anode
+5) End electrodes (copper)
+6) Grounding end caps (stainless steel)
+
+.. figure:: figures/gaborlensinterior.png
+	    :width: 60%
+	    :align: center
+
+.. note:: The transverse extent of the electric field from the plasma is limited to the radius of the
+  cylindrical anode.
+
+.. note:: The Gabor lens element contains 2 end caps that are crucial for grounding and vacuum in such
+  physical devices. In the BDSIM Gabor lenses, both of these are 1cm long. The plasma field does NOT extend
+  to within these volumes, and is limited to the length of the vacuum volume. The field length in Z is therefore
+  the total element length minus 2cm. This should be accounted for by the user when defining the
+  total element length.
+
+.. note:: The end cap aperture is set equal to the electrode radius as both the anode and electrode must be within
+  the beam pipe aperture.
+
+=======================  ================================  ==========  ===========
+Parameter                Description                       Default     Required
+`l`                      Length [m]                        0           Yes
+`Kg`                     Gabor Lens focusing parameter     0           Yes/No*
+`B`                      Solenoid-equivalent B field [T]   0           Yes/No*
+`anodeLength`            Anode length [m]                  0           Yes
+`anodeRadius`            Anode radius [m]                  0           Yes
+`anodeThickness`         Anode thickness [m]               0           Yes
+`electrodeLength`        Electrode length [m]              0           Yes
+`electrodeRadius`        Electrode radius [m]              0           Yes
+`electrodeThickness`     Electrode thickness [m]           0           Yes
+`material`               Gabor lens outer material         Iron        No
+=======================  ================================  ==========  ===========
+
+.. note:: Either `Kg` or `B` can be specified to set the Gabor Lens field strength with `Kg` being the main
+    parameter. `B` will only be used if `Kg` is not specifed (0). If both are unspecified, no field will be constructed.
+
+Notes:
+
+* The anode length must be shorter than the vacuum volume length (total element length minus 20 cm).
+* The anode radius + anode thickness must be smaller than the smallest aperture inner extent.
+* The transverse extent of the electric field from the plasma is limited to the radius of the cylindrical anode.
+* The :ref:`aperture-parameters` control the vacuum volume.
+* The electrode length must be smaller than half the vacuum volume length.
+* The electrode radius + thickness must be smaller than the anode radius.
+
+
+Examples: ::
+
+ g1: gaborlens, l=1.0*m, kg=0.289643, material="copper", anodeRadius=65*mm, anodeLength=0.920, anodeThickness=1.6*mm,
+     electrodeRadius=30*mm, electrodeLength=45*mm, electrodeThickness=1.6*mm;
+
+ g2: gaborlens, l=1.0*m, B=0.6*T, material="copper", anodeRadius=65*mm, anodeLength=0.920, anodeThickness=1.6*mm,
+     electrodeRadius=30*mm, electrodeLength=45*mm, electrodeThickness=1.6*mm;
 
 
 transform3d

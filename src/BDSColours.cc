@@ -115,6 +115,7 @@ BDSColours::BDSColours()
   colours["awakespectrometer"]= colours["sectorbend"];
   colours["gap"]              = colours["default"];
   colours["opaquebox"]        = new G4Colour(0.2, 0.2, 0.2, 0.2); // dark grey but mostly transparent
+  colours["gaborlens"]        = new G4Colour(0.212, 0.655, 0.816);// cerulean blue
   
   // some specific materials
   colours["iron"]             = new G4Colour(0.509, 0.321, 0.294);

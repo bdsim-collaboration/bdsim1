@@ -44,7 +44,7 @@ struct fieldtypes_def
 	     emap1d,  emap2d,  emap3d,  emap4d,
 	     ebmap1d, ebmap2d, ebmap3d, ebmap4d,
 	     mokka,
-	     solenoid, solenoidsheet,
+	     solenoid, solenoidsheet, gaborlens,
 	     dipole, quadrupole, dipolequadrupole, sextupole,
 	     octupole, decapole, multipole, muonspoiler,
              skewquadrupole, skewsextupole, skewoctupole, skewdecapole,

@@ -1,0 +1,26 @@
+d1: drift, l=0.1;
+
+s1: gaborlens, l=0.857*m, kg=0.8045662, material="copper", horizontalWidth=0.4, aper1=0.1,
+    anodeRadius=80*mm, anodeLength=0.46, anodeThickness=1*mm, electrodeRadius=50*mm, electrodeLength=30*mm,
+    electrodeThickness=1*mm;
+
+s2: gaborlens, l=0.52*m, B=1.0*T, material="copper", horizontalWidth=0.3, aper1=0.1,
+    anodeRadius=80*mm, anodeLength=0.46, anodeThickness=1*mm, electrodeRadius=50*mm, electrodeLength=30*mm,
+    electrodeThickness=1*mm;
+
+s3: gaborlens, l=0.52*m, B=0, material="copper", horizontalWidth=0.3, aper1=0.1,
+    anodeRadius=80*mm, anodeLength=0.46, anodeThickness=1*mm, electrodeRadius=50*mm, electrodeLength=30*mm,
+    electrodeThickness=1*mm;
+
+! include zero strength to check tracking correct
+lat : line = (d1,s1,d1,s2,d1,s3,d1);
+
+use, lat;
+
+beam, particle="proton",
+      kineticEnergy=30*MeV,
+      distrType="gauss",
+      sigmaX=1*mm,
+      sigmaXp=1e-3,
+      sigmaY=1*mm,
+      sigmaYp=1e-3;

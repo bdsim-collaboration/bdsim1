@@ -118,6 +118,8 @@ std::string GMAD::typestr(ElementType type)
       {return "rfx";                 break;}
     case ElementType::_RFY:
       {return "rfy";                 break;}
+    case ElementType::_GABORLENS:
+      {return "gaborlens";           break;}
     default:
       {return "none"; break;}
     }

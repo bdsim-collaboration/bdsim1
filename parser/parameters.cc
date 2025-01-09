@@ -66,6 +66,7 @@ Parameters::Parameters()
   setMap["phase"]     = false;
   setMap["tOffset"]   = false;
   setMap["fieldModulator"] = false;
+  setMap["kg"]        = false;
 
   setMap["kick1"]     = false;
   setMap["kick2"]     = false;
@@ -161,6 +162,13 @@ Parameters::Parameters()
   setMap["undulatorPeriod"]       = false;
   setMap["undulatorGap"]          = false;
   setMap["undulatorMagnetHeight"] = false;
+
+  setMap["anodeLength"]          = false;
+  setMap["anodeRadius"]          = false;
+  setMap["anodeThickness"]       = false;
+  setMap["electrodeLength"]      = false;
+  setMap["electrodeRadius"]      = false;
+  setMap["electrodeThickness"]   = false;
 
   setMap["bias"]                 = false;
   setMap["biasMaterial"]         = false;

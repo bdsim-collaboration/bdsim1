@@ -301,7 +301,7 @@ private:
 					      const G4String&          name,
 					      G4double                 irisRadius,
 					      BDSModulatorInfo*        fieldModulator = nullptr);
-
+  BDSAcceleratorComponent* CreateGaborLens();
 #ifdef USE_AWAKE
   BDSAcceleratorComponent* CreateAwakeScreen();
   BDSAcceleratorComponent* CreateAwakeSpectrometer();
@@ -427,6 +427,9 @@ private:
   void GetKickValue(G4double& hkick,
 		    G4double& vkick,
 		    const KickerType type) const;
+
+  /// Calculate the electric field strength of the confined plasma in a Gabor lens.
+  void CalculateGaborLensStrength(BDSMagnetStrength* st) const;
 
   /// Registry of modified elements stored by original name and number of times
   /// modified - 0 counting. This is so when we modify elements beyond their definition
