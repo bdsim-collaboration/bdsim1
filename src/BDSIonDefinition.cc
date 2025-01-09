@@ -87,7 +87,7 @@ std::ostream& operator<< (std::ostream& out, BDSIonDefinition const& io)
 void BDSIonDefinition::Parse(const G4String& definition)
 {
   std::regex wspace("\\s+"); // any whitespace
-  
+
   // A Z Q E
   G4int counter = 0;
   std::vector<G4int*> vals = {&a, &z};
@@ -135,4 +135,5 @@ void BDSIonDefinition::Parse(const G4String& definition)
       G4String message("Invalid ion definition: Charge is greater than Z");
       throw BDSException(__METHOD_NAME__, message);
     }
+    auto dummy = 1;
 }

@@ -24,6 +24,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSTrackingAction.hh"
 #include "BDSTrajectory.hh"
 #include "BDSTrajectoryPrimary.hh"
+#include "BDSUserTrackInformation.hh"
 #include "BDSUtilities.hh"
 
 #include "globals.hh" // geant4 types / globals
@@ -94,6 +95,13 @@ void BDSTrackingAction::PreUserTrackingAction(const G4Track* track)
       fpTrackingManager->SetStoreTrajectory(1);
       fpTrackingManager->SetTrajectory(traj);
     }
+
+  //if ion add BDSElectronOccupancy
+
+
+  BDSUserTrackInformation* trackInfo = new BDSUserTrackInformation(track->GetDynamicParticle());
+  track->SetUserInformation(trackInfo);
+
 }
 
 void BDSTrackingAction::PostUserTrackingAction(const G4Track* track)

@@ -233,6 +233,7 @@ OptionsBase::OptionsBase()
   xrayAllSurfaceRoughness = 0;
   
   // biasing options
+  scaleFactorLaser         = 1;
   defaultBiasVacuum        = "";
   defaultBiasMaterial      = "";
   biasForWorldVolume       = "";

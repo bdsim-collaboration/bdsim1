@@ -273,6 +273,7 @@ namespace GMAD
     ///@}
 
     // biasing options
+    double    scaleFactorLaser;
     std::string defaultBiasVacuum;
     std::string defaultBiasMaterial;
     std::string biasForWorldVolume;

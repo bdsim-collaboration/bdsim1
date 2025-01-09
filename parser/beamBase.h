@@ -165,6 +165,11 @@ namespace GMAD
   
       /// A list of all the keys that have been set in this instance.
       std::vector<std::string> setKeys;
+
+      double polarization1;
+      double polarization2;
+      double polarization3;
+
     };
 }
 

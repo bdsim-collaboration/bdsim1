@@ -45,6 +45,7 @@ void BDSPhysicsLaserWire::ConstructParticle()
 
 void BDSPhysicsLaserWire::ConstructProcess()
 {
+
   if (Activated())
     {return;}
   
@@ -75,4 +76,5 @@ void BDSPhysicsLaserWire::ConstructProcess()
     }
 
   SetActivated();
+
 }

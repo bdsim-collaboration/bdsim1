@@ -58,8 +58,6 @@ std::string GMAD::typestr(ElementType type)
       {return "ecol";                break;}
     case ElementType::_RCOL: 
       {return "rcol";                break;}
-    case ElementType::_LASER:
-      {return "laser";               break;}
     case ElementType::_MATERIAL:
       {return "material";            break;}
     case ElementType::_RBEND:
@@ -82,6 +80,8 @@ std::string GMAD::typestr(ElementType type)
       {return "kicker";              break;}
     case ElementType::_TKICKER:
       {return "tkicker";             break;}
+    case ElementType::_LASERWIREOLD:
+      {return "laserwireold";      break;}
     case ElementType::_TRANSFORM3D:
       {return "transform3d";         break;}
     case ElementType::_WIRESCANNER:
@@ -110,6 +110,8 @@ std::string GMAD::typestr(ElementType type)
       {return "usercomponent";       break;}
     case ElementType::_DUMP:
       {return "dump";                break;}
+    case ElementType::_LASERWIRE:
+      {return "laserwire";           break;}
     case ElementType::_CT:
       {return "ct";                  break;}
     case ElementType::_TARGET:

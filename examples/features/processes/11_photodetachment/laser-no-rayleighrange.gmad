@@ -1,0 +1,25 @@
+lb1: laserflux, wavelength=1064.0*nm,
+     m2=1.2,
+     pulseDuration=106.0*ns,
+     pulseEnergy=0.067*mJ,
+     w0=10.0*um,
+     ignoreRayleighRange=0;
+
+l1: laserwire, l=0.1*m, wireLength=1.0, laserOffsetTheta=-pi/2, laserOffsetPhi = pi/2, laserBeam="lb1";
+d1: drift, l=3.0;
+s1: sbend, l=1.0*m, angle=0.3;
+lat : line=(l1);
+use, lat;
+
+beam, particle="ion 1 1 -1",
+      energy=(0.942022+0.003) * GeV,
+      distrType="gauss",
+      sigmaX=40*um,
+      sigmaY=40*um;
+
+option, physicsList="laser_photo_detachment",
+	storeTrajectory=1,
+	trajConnect=1,
+	storeTrajectoryDepth=1;
+
+sample, range=l1;

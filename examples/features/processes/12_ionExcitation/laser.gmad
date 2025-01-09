@@ -1,0 +1,17 @@
+lb1: laserflux, wavelength=1034.0*nm,
+     	    m2=1.8,
+	    pulseDuration=25.0*ps,
+	    pulseEnergy=2.0*mJ,
+	    w0=100.0*um;
+
+l1: laserwire, l=0.1*m, wireLength=1.0, laserOffsetTheta=-pi*(6.0/180.0), laserOffsetPhi = 0, laserBeam="lb1";
+d1: drift, l=30.0;
+lat : line=(l1,d1);
+use, lat;
+
+beam, particle="ion 208 82 81",
+      energy = 18689.08 * GeV;
+
+option, physicsList="laser_ion_excitation";
+
+sample, range=l1;

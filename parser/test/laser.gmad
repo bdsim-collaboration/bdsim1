@@ -1,0 +1,8 @@
+redlaser: laserflux, wavelength=633*nm,
+	  	 m2 = 1.3,
+		 pulseEnergy = 13*mJ,
+		 pulseDuration = 1.3*ns,
+		 w0 = 23.5*um,
+		 sigma0 = 12*um;
+
+lw1: laserwire, l=0.5*m, aper1=4*cm, laserBeam="redlaser";

@@ -53,7 +53,7 @@ namespace BDS
   G4bool IsIon(const G4ParticleDefinition* particle);
 
   /// Calls IsIon above but also a proton with any bound electrons is considered an ion.
-  G4bool IsIon(const G4DynamicParticle* paritlce);
+  G4bool IsIon(const G4DynamicParticle* particle);
   
   /// Detect whether we're using a Geant4 provided physics list or whether we'll use the
   /// BDSIM modular physics and construct it.

@@ -54,7 +54,7 @@ void Element::PublishMembers()
 {
   publish("userTypeName",   &Element::userTypeName);
   publish("userParameters", &Element::userParameters);
-  
+
   publish("l",         &Element::l);
   publish("scaling",   &Element::scaling);
   publish("scalingFieldOuter", &Element::scalingFieldOuter);
@@ -201,6 +201,17 @@ void Element::PublishMembers()
   publish("materialThickness", &Element::materialThickness);
   publish("degraderOffset",    &Element::degraderOffset);
 
+  publish("laserBeam",         &Element::laserBeam);
+  publish("laserOffsetTheta",  &Element::laserOffsetTheta);
+  publish("laserOffsetPhi",    &Element::laserOffsetPhi);
+  publish("laserOffsetX",      &Element::laserOffsetX);
+  publish("laserOffsetY",      &Element::laserOffsetY);
+  publish("laserOffsetZ",      &Element::laserOffsetZ);
+
+  publish("undulatorPeriod",       &Element::undulatorPeriod);
+  publish("undulatorGap",          &Element::undulatorGap);
+  publish("undulatorMagnetHeight", &Element::undulatorMagnetHeight);
+
   // for wirescanner
   publish("wireDiameter",      &Element::wireDiameter);
   publish("wireLength",        &Element::wireLength);
@@ -233,7 +244,7 @@ void Element::PublishMembers()
   publish("fieldAll",    &Element::fieldAll);
   publish("bmap",        &Element::fieldAll);
   alternativeNames["bmap"] = "fieldAll";
-  
+
   publish("geometryFile",        &Element::geometryFile);
   publish("geometry",            &Element::geometryFile);
   alternativeNames["geometry"] = "geometryFile"; // backwards compatibility
@@ -253,7 +264,7 @@ void Element::PublishMembers()
   publish("dicomDataFile",       &Element::dicomDataFile);
 
   publish("colour",              &Element::colour);
-  
+
   publish("crystalLeft",            &Element::crystalLeft);
   publish("crystalRight",           &Element::crystalRight);
   publish("crystalBoth",            &Element::crystalBoth);
@@ -382,10 +393,10 @@ void Element::print(int ident) const
                   << "scintmaterial   = " << scintmaterial       << std::endl;
         break;
       }
-    case ElementType::_LASER:
+    case ElementType::_LASERWIREOLD:
       {
-        std::cout << "lambda= " << waveLength << "m" << std::endl
-                  << "xSigma= " << xsize << "m" << std::endl
+          std::cout << "lambda= " << waveLength << "m" << std::endl
+                  <<  "xSigma= " << xsize << "m" << std::endl
                   << "ySigma= " << ysize << "m" << std::endl
                   << "xdir= "   << xdir << std::endl
                   << "ydir= "   << ydir << std::endl
@@ -442,7 +453,7 @@ void Element::print(int ident) const
     default:
       {break;}
     }
-  
+
   if (lst)
     {::print(*lst,++ident);}
 }
@@ -505,6 +516,33 @@ void Element::flush()
   rmat42= 0;
   rmat43= 0;
   rmat44= 1.0;
+
+  // degrader
+  numberWedges = 1;
+  wedgeLength = 0;
+  degraderHeight = 0;
+  materialThickness = 0;
+  degraderOffset = 0;
+
+  // laserwire
+  laserBeam        = "";
+  laserOffsetTheta = 0;
+  laserOffsetPhi   = 0;
+  laserOffsetX     = 0;
+  laserOffsetY     = 0;
+  laserOffsetZ     = 0;
+
+  // wirescanner
+  wireDiameter = 0;
+  wireLength   = 0;
+  wireOffsetX  = 0;
+  wireOffsetY  = 0;
+  wireOffsetZ  = 0;
+
+  // undulator
+  undulatorPeriod = 1;
+  undulatorGap = 0;
+  undulatorMagnetHeight = 0;
 
   // new aperture model
   beampipeThickness = 0;
@@ -597,14 +635,14 @@ void Element::flush()
   biasVacuum   = "";
   biasMaterialList.clear();
   biasVacuumList.clear();
-  
+
   minimumKineticEnergy = 0;
 
   samplerName = "";
   samplerType = "none"; // allowed "none", "plane", "cylinder"
   samplerRadius = 0;
   samplerParticleSetID = -1;   // -1 is code for none
-  
+
   region      = "";
   fieldOuter  = "";
   fieldVacuum = "";
@@ -620,10 +658,10 @@ void Element::flush()
   spec = "";
   cavityModel = "";
   cavityFieldType = "";
-  
+
   dicomDataFile = "";
   dicomDataPath = "";
-  
+
   colour = "";
 
   crystalLeft            = "";
@@ -636,6 +674,7 @@ void Element::flush()
   scalingFieldOuterSet = false;
 
   lst = nullptr;
+
 }
 
 double Element::property_lookup(std::string property_name) const
@@ -646,7 +685,7 @@ double Element::property_lookup(std::string property_name) const
   catch (const std::runtime_error&)
     {
       std::cerr << "element.cc> Error: unknown property \"" << property_name
-                << "\" (only works on numerical properties)" << std::endl; 
+                << "\" (only works on numerical properties)" << std::endl;
       exit(1);
     }
   return value;

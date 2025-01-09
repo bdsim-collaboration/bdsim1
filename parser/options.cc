@@ -357,6 +357,7 @@ void Options::PublishMembers()
   publish("xrayAllSurfaceRoughness",         &Options::xrayAllSurfaceRoughness);
   
   // bias options
+  publish("scaleFactorLaser",    &Options::scaleFactorLaser);
   publish("defaultBiasVacuum",   &Options::defaultBiasVacuum);
   publish("defaultBiasMaterial", &Options::defaultBiasMaterial);
   publish("biasForWorldVolume",  &Options::biasForWorldVolume);

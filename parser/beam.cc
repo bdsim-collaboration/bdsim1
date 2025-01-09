@@ -332,4 +332,10 @@ void Beam::PublishMembers()
   publish("eventGeneratorMaxEK",     &Beam::eventGeneratorMaxEK); // alias
   publish("eventGeneratorParticles", &Beam::eventGeneratorParticles);
   publish("eventGeneratorWarnSkippedParticles", &Beam::eventGeneratorWarnSkippedParticles);
+
+  //polarization
+  publish("polarization1",        &Beam::polarization1);
+  publish("polarization2",         &Beam::polarization2);
+  publish("polarization3",          &Beam::polarization3);
+
 }

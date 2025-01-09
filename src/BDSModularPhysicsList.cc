@@ -35,6 +35,16 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSPhysicsSynchRad.hh"
 #include "BDSPhysicsUtilities.hh"
 #include "BDSUtilities.hh"
+#include "BDSPhysicsLaserPhotoDetachment.hh"
+#include "BDSPhysicsLaserIonExcitation.hh"
+#include "BDSPhysicsLaserComptonScattering.hh"
+#include "BDSPhysicsLaserCumulativePhotodetachment.hh"
+#include "BDSPhysicsLaserCumulativeCompton.hh"
+#include "BDSPhysicsLaserWire.hh"
+#include "BDSPhysicsMuon.hh"
+#include "BDSPhysicsSynchRad.hh"
+#include "BDSPhysicsUtilities.hh"
+#include "BDSUtilities.hh"
 
 #include "parser/fastlist.h"
 #include "parser/physicsbiasing.h"
@@ -209,6 +219,11 @@ BDSModularPhysicsList::BDSModularPhysicsList(const G4String& physicsList):
   physicsConstructors.insert(std::make_pair("ion_inclxx",             &BDSModularPhysicsList::IonINCLXX));
   physicsConstructors.insert(std::make_pair("ionisation",             &BDSModularPhysicsList::Ionisation));
   physicsConstructors.insert(std::make_pair("lw",                     &BDSModularPhysicsList::LaserWire));
+  physicsConstructors.insert(std::make_pair("laser_photo_detachment", &BDSModularPhysicsList::LaserPhotoDetachment));
+  physicsConstructors.insert(std::make_pair("laser_compton_scattering", &BDSModularPhysicsList::LaserComptonScattering));
+  physicsConstructors.insert(std::make_pair("laser_cumulative_photo_detachment", &BDSModularPhysicsList::LaserCumulativePhotoDetachment));
+  physicsConstructors.insert(std::make_pair("laser_cumulative_compton_scattering", &BDSModularPhysicsList::LaserCumulativeCompton));
+  physicsConstructors.insert(std::make_pair("laser_ion_excitation",   &BDSModularPhysicsList::LaserIonExcitation));
   physicsConstructors.insert(std::make_pair("muon",                   &BDSModularPhysicsList::Muon));
   physicsConstructors.insert(std::make_pair("muon_inelastic",         &BDSModularPhysicsList::MuonInelastic));
   physicsConstructors.insert(std::make_pair("neutron_tracking_cut",   &BDSModularPhysicsList::NeutronTrackingCut));
@@ -936,6 +951,51 @@ void BDSModularPhysicsList::LaserWire()
     }
 }
 
+void BDSModularPhysicsList::LaserPhotoDetachment()
+{
+  if(!physicsActivated["laser_photo_detachment"])
+  {
+    constructors.push_back(new BDSPhysicsLaserPhotoDetachment());
+    physicsActivated["laser_photo_detachment"] = true;
+  }
+}
+
+void BDSModularPhysicsList::LaserComptonScattering()
+{
+  if(!physicsActivated["laser_compton_scattering"])
+  {
+    constructors.push_back(new BDSPhysicsLaserComptonScattering());
+    physicsActivated["laser_compton_scattering"] = true;
+  }
+}
+
+void BDSModularPhysicsList::LaserCumulativePhotoDetachment()
+{
+  if(!physicsActivated["laser_cumulative_photo_detachment"])
+  {
+    constructors.push_back(new BDSPhysicsLaserCumulativePhotodetachment());
+    physicsActivated["laser_cumulative_photo_detachment"] = true;
+  }
+}
+
+void BDSModularPhysicsList::LaserCumulativeCompton()
+{
+  if(!physicsActivated["laser_cumulative_compton_scattering"])
+  {
+    constructors.push_back(new BDSPhysicsLaserCumulativeCompton());
+    physicsActivated["laser_cumulative_compton_scattering"] = true;
+  }
+}
+
+void BDSModularPhysicsList::LaserIonExcitation()
+{
+  if(!physicsActivated["laser_ion_excitation"])
+  {
+    constructors.push_back(new BDSPhysicsLaserIonExcitation());
+    physicsActivated["laser_ion_excitation"] = true;
+  }
+}
+
 void BDSModularPhysicsList::Muon()
 {
   if (!physicsActivated["muon"])
@@ -1138,6 +1198,7 @@ void BDSModularPhysicsList::DNA()
       physicsActivated["dna"] = true;
     }
 }
+
 
 void BDSModularPhysicsList::Channelling()
 {

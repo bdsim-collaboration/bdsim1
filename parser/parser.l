@@ -1,14 +1,14 @@
 /* 
-Beam Delivery Simulation (BDSIM) Copyright (C) Royal Holloway, 
+Beam Delivery Simulation (BDSIM) Copyright (C) Royal Holloway,
 University of London 2001 - 2024.
 
 This file is part of BDSIM.
 
-BDSIM is free software: you can redistribute it and/or modify 
-it under the terms of the GNU General Public License as published 
+BDSIM is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published
 by the Free Software Foundation version 3 of the License.
 
-BDSIM is distributed in the hope that it will be useful, but 
+BDSIM is distributed in the hope that it will be useful, but
 WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -119,7 +119,7 @@ screen { return SCREEN; }
 awakescreen { return AWAKESCREEN; }
 awakespectrometer { return AWAKESPECTROMETER; }
 transform3d { return TRANSFORM3D ; }
-laser { return LASER; }
+laser { return LASERWIREOLD; }
 degrader { return DEGRADER;}
 gap { return GAP;}
 thinrmatrix { return THINRMATRIX;}
@@ -132,6 +132,7 @@ usercomponent { return USERCOMPONENT; }
 dump { return DUMP; }
 ct { return CT; }
 target { return TARGET; }
+laserwire   { return LASERWIRE; }
 
 cavitymodel {return CAVITYMODEL; }
 cutsregion { return REGION; }
@@ -139,6 +140,7 @@ newcolour { return NEWCOLOUR; }
 crystal { return CRYSTAL; }
 field { return FIELD; }
 placement { return PLACEMENT; }
+laserflux   {return LASER; }
 query { return QUERY; }
 samplerplacement { return SAMPLERPLACEMENT; }
 scorer { return SCORER; }

@@ -34,7 +34,7 @@ Parameters::Parameters()
   // usually same but some exceptions, those are commented
   setMap["userTypeName"]   = false;
   setMap["userParameters"] = false;
-  
+
   setMap["l"]         = false;
   setMap["scaling"]   = false;
   setMap["scalingFieldOuter"] = false;
@@ -96,7 +96,7 @@ Parameters::Parameters()
   setMap["apertureType"]       = false;
   setMap["beampipeMaterial"]   = false;
   setMap["vacuumMaterial"]     = false;
-  
+
   setMap["magnetGeometryType"] = false;
   setMap["horizontalWidth"]    = false;
   setMap["yokeOnInside"]       = false;
@@ -113,7 +113,7 @@ Parameters::Parameters()
   setMap["xsizeRight"]         = false;
   setMap["offsetX"]            = false;
   setMap["offsetY"]            = false;
-  
+
   setMap["tscint"]             = false;
   setMap["twindow"]            = false;
   setMap["tmount"]             = false;
@@ -132,11 +132,12 @@ Parameters::Parameters()
   setMap["scintmaterial"]      = false;
   setMap["windowmaterial"]     = false;
   setMap["mountmaterial"]      = false;
-  
+
   setMap["xdir"]               = false;
   setMap["ydir"]               = false;
-  setMap["zdir"]               = false; 
+  setMap["zdir"]               = false;
   setMap["waveLength"]         = false;
+  setMap["gradient"]           = false;
   setMap["phi"]                = false;
   setMap["theta"]              = false;
   setMap["psi"]                = false;
@@ -150,6 +151,13 @@ Parameters::Parameters()
   setMap["degraderHeight"]    = false;
   setMap["materialThickness"] = false;
   setMap["degraderOffset"]    = false;
+    
+  setMap["laserBeam"]         = false;
+  setMap["laserOffsetTheta"]  = false;
+  setMap["laserOffsetPhi"]    = false;
+  setMap["laserOffsetX"]      = false;
+  setMap["laserOffsetY"]      = false;
+  setMap["laserOffsetZ"]      = false;
 
   setMap["wireDiameter"]      = false;
   setMap["wireLength"]        = false;
@@ -157,7 +165,7 @@ Parameters::Parameters()
   setMap["wireOffsetY"]       = false;
   setMap["wireOffsetZ"]       = false;
   setMap["wireAngle"]         = false;
-  
+
   setMap["undulatorPeriod"]       = false;
   setMap["undulatorGap"]          = false;
   setMap["undulatorMagnetHeight"] = false;
@@ -165,9 +173,9 @@ Parameters::Parameters()
   setMap["bias"]                 = false;
   setMap["biasMaterial"]         = false;
   setMap["biasVacuum"]           = false;
-  
+
   setMap["minimumKineticEnergy"] = false;
-  
+
   setMap["samplerName"]          = false;
   setMap["samplerType"]          = false;
   setMap["samplerRadius"]        = false;

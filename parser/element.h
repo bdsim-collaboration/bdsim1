@@ -170,7 +170,16 @@ namespace GMAD
     double degraderOffset;
     ///@}
 
-    ///@{ for wirescanner
+    ///@{ for laserwire
+    std::string laserBeam;
+    double laserOffsetTheta;
+    double laserOffsetPhi;
+    double laserOffsetX;
+    double laserOffsetY;
+    double laserOffsetZ;
+    ///@}
+
+    ///@[ for wirescanner
     double wireDiameter;
     double wireLength;
     double wireOffsetX;
@@ -204,7 +213,7 @@ namespace GMAD
     /// ID to a map for a set of which partIDs to store for a sampler. We use an integer
     /// to a map we keep in the parser to save memory, so we don't copy a set to every
     /// beam line element.
-    int    samplerParticleSetID;  
+    int    samplerParticleSetID;
     
     std::string region;      ///< region with range cuts
     std::string fieldOuter;  ///< Outer field.
@@ -240,7 +249,7 @@ namespace GMAD
     /// field. This allows us to distinguish later on.
     /// NOTE: this is not used in Params.
     bool   angleSet;
-    
+
     bool   scalingFieldOuterSet;
 
     /// in case the element is a list itself (line)

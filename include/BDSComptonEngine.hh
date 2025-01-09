@@ -30,7 +30,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
  * @author Grahame Blair.
  */
 
-class BDSComptonEngine  
+class BDSComptonEngine
 { 
 public: 
   BDSComptonEngine();

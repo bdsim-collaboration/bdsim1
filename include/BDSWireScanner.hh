@@ -26,7 +26,10 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "G4ThreeVector.hh"
 
 class BDSBeamPipeInfo;
+class G4Colour;
+class G4LogicalVolume;
 class G4Material;
+class G4VSolid;
 
 /**
  * @brief Single cylindrical wire inside beam pipe.
@@ -44,7 +47,10 @@ public:
 		 G4double         wireDiameterIn,
 		 G4double         wireLengthIn,
 		 G4double         wireAngleIn  = 0,
-		 G4ThreeVector    wireOffsetIn = G4ThreeVector());
+		 G4ThreeVector    wireOffsetIn = G4ThreeVector(),
+		 G4Colour*        wireColourIn = nullptr
+
+  );
 
   virtual ~BDSWireScanner(){;}
 
@@ -52,16 +58,21 @@ public:
   virtual G4String Material() const {return wireMaterial->GetName();}
   
 protected:
-  virtual void Build();
-  
+  virtual void Build();  
   virtual void BuildContainerLogicalVolume();
+
+  /// @{ Allow overriding of certain bits of construction.
+  virtual G4VSolid*        BuildWireSolid();
+  virtual G4LogicalVolume* BuildWireLV(G4VSolid* solid);
+  /// @}
 
   G4Material*   wireMaterial;
   G4double      wireDiameter;
   G4double      wireLength;
   G4double      wireAngle;
   G4ThreeVector wireOffset;
-  
+  G4Colour*     wireColour;
+
 private:
   /// Private default constructor to force the use of the supplied one.
   BDSWireScanner() = delete;

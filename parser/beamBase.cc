@@ -153,4 +153,9 @@ BeamBase::BeamBase()
   eventGeneratorMaxEK = 1e50;
   eventGeneratorParticles = "";
   eventGeneratorWarnSkippedParticles = true;
+
+  polarization1 = 0;
+  polarization2 = 0;
+  polarization3 = 0;
+
 }

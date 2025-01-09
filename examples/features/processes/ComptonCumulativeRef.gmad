@@ -1,0 +1,20 @@
+
+lb1: laser, wavelength=532.0*nm,
+m2=1.2,
+pulseDuration=150.0*ps,
+pulseEnergy=400*mJ,
+sigma0=1.0*um;
+
+laser1: laserwire, l=0.01*m, wireLength=0.1*m, laserOffsetTheta=-pi/2, laserOffsetPhi=0,laserOffsetY=0.000000,laserOffsetZ=0*m,laserOffsetX=0.0000*um, laserBeam="lb1";
+
+lat : line=(laser1);
+use, lat;
+
+gam=1.3e9/0.511e6;
+beam,    distrType="reference",
+particle="e-",
+energy=1.3*GeV;
+
+option, physicsList="laser_cumulative_compton_scattering";
+sample, range=laser1;
+

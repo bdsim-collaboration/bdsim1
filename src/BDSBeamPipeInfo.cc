@@ -27,6 +27,8 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "globals.hh" // geant4 types / globals
 #include "G4Material.hh"
 
+#include <algorithm>
+#include <array>
 
 BDSBeamPipeInfo::BDSBeamPipeInfo(BDSBeamPipeType      beamPipeTypeIn,
                                  G4double             aper1In,
@@ -75,7 +77,7 @@ BDSBeamPipeInfo::BDSBeamPipeInfo(const G4String&      beamPipeTypeIn,
   beamPipeType     = BDS::DetermineBeamPipeType(beamPipeTypeIn);
   vacuumMaterial   = BDSMaterials::Instance()->GetMaterial(vacuumMaterialIn);
   beamPipeMaterial = BDSMaterials::Instance()->GetMaterial(beamPipeMaterialIn);
-  
+
   if (beamPipeType == BDSBeamPipeType::pointsfile)
     {CheckAndSetPointsInfo(beamPipeTypeIn);}
   CheckApertureInfo();
@@ -108,7 +110,7 @@ BDSBeamPipeInfo::BDSBeamPipeInfo(const BDSBeamPipeInfo* defaultInfo,
       if (beamPipeType == BDSBeamPipeType::pointsfile)
         {CheckAndSetPointsInfo(beamPipeTypeIn);}
     }
-  
+
   if (!BDS::IsFinite(aper1In))
     {aper1 = defaultInfo->aper1;}
   else
@@ -142,6 +144,7 @@ BDSBeamPipeInfo::BDSBeamPipeInfo(const BDSBeamPipeInfo* defaultInfo,
   CheckApertureInfo();
 }
 
+
 void BDSBeamPipeInfo::CheckAndSetPointsInfo(const G4String& beamPipeTypeIn)
 {
   auto typeAndFileName = BDS::SplitOnColon(beamPipeTypeIn); // find first colon
@@ -158,7 +161,21 @@ void BDSBeamPipeInfo::CheckAndSetPointsInfo(const G4String& beamPipeTypeIn)
       pointsUnit = "mm";
     }
 }
-  
+
+
+BDSBeamPipeInfo BDSBeamPipeInfo::ShrinkBy(G4double margin) const
+{
+  BDSBeamPipeInfo result(*this); // make a copy
+
+  std::array<G4double*, 4> apers {&result.aper1, &result.aper2, &result.aper3, &result.aper4};
+  for (auto var : apers)
+  {
+      if (*var > 0)
+        { *var -= margin;}
+  }
+  return result;
+}
+
 void BDSBeamPipeInfo::CheckApertureInfo()
 {
   switch (beamPipeType.underlying())

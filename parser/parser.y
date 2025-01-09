@@ -91,11 +91,11 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 %token <str> STR VARIABLE
 %token <ival> MARKER ELEMENT DRIFT RF RBEND SBEND QUADRUPOLE SEXTUPOLE OCTUPOLE
 %token <ival> DECAPOLE MULTIPOLE SCREEN AWAKESCREEN AWAKESPECTROMETER THINMULT
-%token <ival> SOLENOID RCOL JCOL ECOL LINE LASER TRANSFORM3D MUONSPOILER MUSPOILER
+%token <ival> SOLENOID RCOL JCOL ECOL LINE LASERWIREOLD TRANSFORM3D MUONSPOILER MUSPOILER
 %token <ival> SHIELD DEGRADER GAP CRYSTALCOL WIRESCANNER
 %token <ival> VKICKER HKICKER KICKER TKICKER THINRMATRIX PARALLELTRANSPORTER
-%token <ival> RMATRIX UNDULATOR USERCOMPONENT DUMP CT TARGET RFX RFY
-%token ALL ATOM MATERIAL PERIOD XSECBIAS REGION PLACEMENT NEWCOLOUR SAMPLERPLACEMENT
+%token <ival> RMATRIX UNDULATOR USERCOMPONENT DUMP CT TARGET RFX RFY LASERWIRE
+%token ALL ATOM MATERIAL PERIOD XSECBIAS REGION PLACEMENT NEWCOLOUR SAMPLERPLACEMENT LASER
 %token SCORER SCORERMESH BLM MODULATOR
 %token CRYSTAL FIELD CAVITYMODEL QUERY TUNNEL APERTURE
 %token BEAM OPTION PRINT RANGE STOP USE SAMPLE CSAMPLE
@@ -283,6 +283,14 @@ decl : VARIABLE ':' component_with_params
              Parser::Instance()->Add<Modulator>(true, "modulator");
          }
      }
+     | VARIABLE ':' laser
+     {
+         if(execute) {
+             if(ECHO_GRAMMAR) std::cout << "decl -> VARIABLE " << *($1) << " : laser" << std::endl;
+             Parser::Instance()->SetValue<Laser>("name",*($1));
+             Parser::Instance()->Add<Laser>(true, "laser");
+          }
+     }
      | VARIABLE ':' query
      {
          if(execute) {
@@ -390,7 +398,7 @@ component : DRIFT       {$$=static_cast<int>(ElementType::_DRIFT);}
           | WIRESCANNER {$$=static_cast<int>(ElementType::_WIRESCANNER);}
           | GAP         {$$=static_cast<int>(ElementType::_GAP);}
           | CRYSTALCOL  {$$=static_cast<int>(ElementType::_CRYSTALCOL);}
-          | LASER       {$$=static_cast<int>(ElementType::_LASER);}
+          | LASERWIREOLD        {$$=static_cast<int>(ElementType::_LASERWIREOLD);}
           | SCREEN      {$$=static_cast<int>(ElementType::_SCREEN);}
           | AWAKESCREEN {$$=static_cast<int>(ElementType::_AWAKESCREEN);}
           | AWAKESPECTROMETER {$$=static_cast<int>(ElementType::_AWAKESPECTROMETER);}
@@ -406,11 +414,13 @@ component : DRIFT       {$$=static_cast<int>(ElementType::_DRIFT);}
           | TARGET      {$$=static_cast<int>(ElementType::_TARGET);}
           | RFX         {$$=static_cast<int>(ElementType::_RFX);}
           | RFY         {$$=static_cast<int>(ElementType::_RFY);}
+          | LASERWIRE   {$$=static_cast<int>(ElementType:: _LASERWIRE);}
 
 atom        : ATOM        ',' atom_options
 material    : MATERIAL    ',' material_options
 region      : REGION      ',' region_options
 placement   : PLACEMENT   ',' placement_options
+laser       : LASER       ',' laser_options
 newcolour   : NEWCOLOUR   ',' colour_options
 crystal     : CRYSTAL     ',' crystal_options
 field       : FIELD       ',' field_options
@@ -911,6 +921,14 @@ command : STOP         { if(execute) Parser::Instance()->quit(); }
               Parser::Instance()->Add<Modulator>(true, "modulator");
             }
         }
+        | LASER ',' laser_options // laser
+        {
+          if(execute)
+            {
+              if(ECHO_GRAMMAR) std::cout << "command -> LASER" << std::endl;
+              Parser::Instance()->Add<Laser>(true, "laser");
+            }
+         }
         | NEWCOLOUR ',' colour_options // colour
         {
           if(execute)
@@ -1145,6 +1163,14 @@ modulator_options : paramassign '=' aexpr modulator_options_extend
                     { if(execute) Parser::Instance()->SetValue<Modulator>((*$1),$3);}
                   | paramassign '=' string modulator_options_extend
                     { if(execute) Parser::Instance()->SetValue<Modulator>(*$1,*$3);}
+
+laser_options_extend : /* nothing */
+                         | ',' laser_options
+
+laser_options : paramassign '=' aexpr laser_options_extend
+                    { if(execute) Parser::Instance()->SetValue<Laser>((*$1),$3);}
+                  | paramassign '=' string laser_options_extend
+                    { if(execute) Parser::Instance()->SetValue<Laser>(*$1,*$3);}
 
 query_options_extend : /* nothing */
                      | ',' query_options

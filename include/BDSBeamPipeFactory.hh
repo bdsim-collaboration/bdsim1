@@ -51,6 +51,13 @@ public:
   BDSBeamPipe* CreateBeamPipe(const G4String&  name,
 			      G4double         length,
 			      BDSBeamPipeInfo* bpi);
+
+  /// Create a circular vacuum volume that's smaller than the aperture definition
+  /// by length safety large suitable for intersections with something that should
+  /// fit in the vacuum of a beam pipe that would be created with the same recipe.
+  BDSBeamPipe* CreateBeamPipeForVacuumIntersection(const G4String&  name,
+						   G4double         length,
+						   BDSBeamPipeInfo* info);
   
   BDSBeamPipe* CreateBeamPipe(BDSBeamPipeType beamPipeTypeIn,            // aperture type
 			      const G4String& nameIn,                    // name

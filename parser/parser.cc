@@ -78,6 +78,9 @@ namespace GMAD {
   template void Parser::Add<Material, FastList<Material> >(bool unique, const std::string& className);
   template void Parser::Add<NewColour, FastList<NewColour> >(bool unique, const std::string& className);
   template void Parser::Add<PhysicsBiasing, FastList<PhysicsBiasing> >(bool unique, const std::string& className);
+  template void Parser::Add<Laser, FastList<Laser> >(bool unique, const std::string& className);
+
+
 }
 
 using namespace GMAD;
@@ -316,7 +319,7 @@ void Parser::expand_line(FastList<Element>& target,
       std::cerr << "Error with use command: \"" << name << "\" is not a line" << std::endl;
       exit(1);
     }
-  
+
   // delete the previous beamline  
   target.clear();
   
@@ -410,7 +413,7 @@ void Parser::expand_line(FastList<Element>& target,
 #endif
               // copy properties
               element = (*tmpit);
-              
+
 #ifdef BDSDEBUG 
               std::cout << "done" << std::endl;
 #endif
@@ -430,7 +433,7 @@ void Parser::expand_line(FastList<Element>& target,
           exit(1);
         }
     }// while
-    
+
   // leave only the desired range
   //
   // rule - from first occurrence of 'start' till first 'end' coming after 'start'
@@ -484,13 +487,13 @@ void Parser::set_sampler(const std::string& name,
         {// skip LINEs
           if((*it).type == ElementType::_LINE || (*it).type == ElementType::_REV_LINE)
             {continue;}
-          // if type not equal to NONE and elements have to match type 
+          // if type not equal to NONE and elements have to match type
           if (type != ElementType::_NONE && type != (*it).type)
             {continue;}
-          
+
           (*it).setSamplerInfo(samplerType,(*it).name,samplerRadius,particleSetID);
         }
-    } 
+    }
   else if (count == -1) // if count equal to -1 add sampler to all element instances
     {
       auto itPair = beamline_list.equal_range(name);
@@ -515,7 +518,7 @@ void Parser::set_sampler(const std::string& name,
                   if (elementIt == beamline_list.begin())
                     {break;}
                 }
-          
+
               if (elementIt==beamline_list.begin())
                 {
                   std::cout << "parser> SetSampler> WARNING: no element before marker " << name << ", no sampler added" << std::endl;
@@ -602,7 +605,7 @@ const Element& Parser::find_element(const std::string& element_name)const
   auto search = element_list.find(element_name);
   if (search == element_list.end())
     {
-      std::cerr << "parser.h> Error: unknown element \"" << element_name << "\"." << std::endl; 
+      std::cerr << "parser.h> Error: unknown element \"" << element_name << "\"." << std::endl;
       exit(1);
     }
   return (*search);
@@ -740,7 +743,7 @@ void Parser::Overwrite(const std::string& objectName)
   // find object and set values
 
   // possible object types are:
-  // element, atom, colour, crystal, field, material, physicsbiasing, placement,
+  // element, atom, colour, crystal, field, laser, material, physicsbiasing, placement,
   // query, region, tunnel, cavitymodel, samplerplacement, aperture, scorer, scorermesh, blm
   bool extended = false;
   auto element_it = element_list.find(objectName);
@@ -776,6 +779,7 @@ void Parser::Overwrite(const std::string& objectName)
     else if ( (extended = FindAndExtend<Aperture>   (objectName)) ) {}
     else if ( (extended = FindAndExtend<BLMPlacement> (objectName)) ) {}
     else if ( (extended = FindAndExtend<Modulator>  (objectName)) ) {}
+    else if ( (extended = FindAndExtend<Laser>      (objectName)) ) {}
   }
 
   if (!extended)
@@ -841,7 +845,7 @@ bool Parser::TryPrintingObject(const std::string& objectName) const
   // search each member vector. Try to optimise by returning once done.
   // This is a cpu-heavy solution vs a memory-heavy one that would have to
   // keep a duplicate copy of all objects for printing.
-  
+
   const std::string& on = objectName; // shortcut
 
   // we use a lambda to compare against obj.name instead of obj itself
@@ -857,6 +861,9 @@ bool Parser::TryPrintingObject(const std::string& objectName) const
   auto searchField = std::find_if(field_list.begin(), field_list.end(), [&on](const Field& obj) {return obj.name == on;});
   if (searchField != field_list.end())
     {searchField->print(); return true;}
+  auto searchLaser = std::find_if(laser_list.begin(), laser_list.end(), [&on](const Laser& obj) {return obj.name == on;});
+  if (searchLaser != laser_list.end())
+    {searchLaser->print(); return true;}
   auto searchMaterial = std::find_if(material_list.begin(), material_list.end(), [&on](const Material& obj) {return obj.name == on;});
   if (searchMaterial != material_list.end())
     {searchMaterial->print(); return true;}
@@ -896,7 +903,7 @@ bool Parser::TryPrintingObject(const std::string& objectName) const
   auto searchModulator = std::find_if(modulator_list.begin(), modulator_list.end(), [&on](const Modulator& obj) {return obj.name == on;});
   if (searchModulator != modulator_list.end())
     {searchModulator->print(); return true;}
-  
+
   return false;
 }
 
@@ -982,14 +989,20 @@ namespace GMAD {
 
   template<>
   FastList<ScorerMesh>& Parser::GetList<ScorerMesh>() {return scorermesh_list;}
-  
+
   template<>
   Placement& Parser::GetGlobal(){return placement;}
 
   template<>
   FastList<Placement>& Parser::GetList<Placement>(){return placement_list;}
-  
+
   template<>
+  Laser& Parser::GetGlobal(){return laser;}
+
+  template<>
+  FastList<Laser>& Parser::GetList<Laser>(){return laser_list;}
+
+    template<>
   PhysicsBiasing& Parser::GetGlobal(){return xsecbias;}
 
   template<>
@@ -1018,7 +1031,7 @@ namespace GMAD {
 
   template<>
   FastList<Aperture>& Parser::GetList<Aperture>() {return aperture_list;}
-  
+
   template<>
   void Parser::ExtendValue(const std::string& property, double value)
   {extendedNumbers[property]=value;}
@@ -1030,7 +1043,7 @@ namespace GMAD {
   template<>
   void Parser::ExtendValue(const std::string& property, Array* value)
   {extendedVectors[property]=value;}
-  
+
   template <class C, class Container>
   void Parser::Add()
   {
@@ -1044,7 +1057,7 @@ namespace GMAD {
 #endif
     GetList<C, Container>().push_back(inst);
   }
-  
+
   template <class C, class Container>
   void Parser::Add(bool unique, const std::string& className)
   {
@@ -1058,7 +1071,7 @@ namespace GMAD {
 #endif
     GetList<C, Container>().push_back(inst, unique, className);
   }
-  
+
   /// Specialisation for Placements where we separately cache an Element. Note
   /// we can't do a partial specialisation so we have to do a full explicit one.
   /// Therefore we also have to be careful about the order we declare this because

@@ -339,7 +339,6 @@ BDSParticleDefinition* BDS::ConstructParticleDefinition(const G4String& particle
 
       BDS::ConstructBeamParticleG4(particleName); // enforce construction of some basic particles
       G4ParticleDefinition* particleDef = nullptr;
-      
       // try and see if it's an integer and therefore PDG ID, if not search by string
       try
         {

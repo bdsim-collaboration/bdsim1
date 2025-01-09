@@ -100,6 +100,9 @@ public:
   /// Return an indicative inner extent for the beam pipe vacuum.
   G4double IndicativeRadiusInner() const;
 
+  /// Return a copy that's shrunk by value margin.
+  BDSBeamPipeInfo ShrinkBy(G4double margin) const;
+
   ///@{ Public member for direct access
   BDSBeamPipeType beamPipeType;
   G4double        aper1;

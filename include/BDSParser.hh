@@ -67,7 +67,7 @@ public:
   void AmalgamateBeam(const GMAD::Beam& beamIn, bool recreate);
   /// Check options for consistency. This also checks the beam options.
   void CheckOptions();
-  
+
   /// Return the beamline. See GMAD::Parser. Our inheritance here is private, so
   /// we re-expose this function as public for use in BDSIM, without redefining it
   /// or reimplementing it. const FastList<Element>& GMAD::Parser::GetBeamline() const;
@@ -79,11 +79,11 @@ public:
 
   /// Return sequence.
   inline const GMAD::FastList<GMAD::Element>& GetSequence(const std::string& name) {return get_sequence(name);}
-  
+
   /// Return an element definition. Returns nullptr if not found. Note the element_list is
   /// emptied after parsing.
   inline const GMAD::Element* GetElement(const std::string& name) {return find_element_safe(name);}
-  
+
   /// Return a placement element definition. Returns nullptr if not found. Only searches
   /// elements used in the placement.
   inline const GMAD::Element* GetPlacementElement(const std::string& name) {return find_placement_element_safe(name);}
@@ -99,6 +99,7 @@ public:
   inline std::vector<GMAD::NewColour> GetColours() const {return colour_list.getVector();}
   inline std::vector<GMAD::Crystal> GetCrystals() const {return crystal_list.getVector();}
   inline std::vector<GMAD::Field> GetFields() const {return field_list.getVector();}
+  inline std::vector<GMAD::Laser>GetLasers() const {return laser_list.getVector();}
   inline std::vector<GMAD::Material> GetMaterials() const {return material_list.getVector();}
   inline std::vector<GMAD::Placement> GetPlacements() const {return placement_list.getVector();}
   inline std::vector<GMAD::Query> GetQuery() const {return query_list.getVector();}
@@ -110,7 +111,7 @@ public:
   inline std::vector<GMAD::Modulator> GetModulators() const {return modulator_list.getVector();}
   inline std::vector<GMAD::Aperture> GetApertures() const {return aperture_list.getVector();}
   /// @}
-  
+
 protected:
   /// Constructor from filename.
   explicit BDSParser(const std::string& filename);
