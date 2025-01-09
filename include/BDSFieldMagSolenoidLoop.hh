@@ -1,6 +1,6 @@
 /* 
 Beam Delivery Simulation (BDSIM) Copyright (C) Royal Holloway, 
-University of London 2001 - 2024.
+University of London 2001 - 2022.
 
 This file is part of BDSIM.
 
@@ -16,8 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef BDSFIELDMAGSOLENOIDSHEET_H
-#define BDSFIELDMAGSOLENOIDSHEET_H
+#ifndef BDSFIELDMAGSOLENOIDLOOP_H
+#define BDSFIELDMAGSOLENOIDLOOP_H
 
 #include "BDSFieldMag.hh"
 
@@ -37,29 +37,27 @@ class BDSMagnetStrength;
  * https://arxiv.org/abs/0909.3880.
  *
  * The field is calculated in cylindrical coordinates. A complete description is in the manual.
+ *
+ * The strength is effectively stored in the member variable mu0OverPiTimesITimesA, but I and B0
+ * are accessible for inspection.
  * 
  * @author Laurie Nevay
  */
 
-class BDSFieldMagSolenoidSheet: public BDSFieldMag
+class BDSFieldMagSolenoidLoop: public BDSFieldMag
 {
 public:
-  BDSFieldMagSolenoidSheet() = delete;
-  /// This constructor uses the "field" and "length" parameters
-  /// from the BDSMagnetStrength instance and forwards to the next constructor.
-  BDSFieldMagSolenoidSheet(BDSMagnetStrength const* strength,
-                           G4double radiusIn ,G4double toleranceIn = 0.0);
-  /// More reasonable constructor for the internal parameterisation. 'strength'
-  /// can be either B0 or I. This is interpreted via 'strengthIsCurrent'. Have
-  /// to do this as the signature would be the same for either case.
-  BDSFieldMagSolenoidSheet(G4double strength,
-                           G4bool   strengthIsCurrent,
-                           G4double sheetRadius,
-                           G4double fullLength
-                           ,G4double toleranceIn = 0.0
-                           );
+  BDSFieldMagSolenoidLoop() = delete;
+  /// Explicit constructor. Strength can be either I or B0 as specified by 'strengthIsCurrent'.
+  BDSFieldMagSolenoidLoop(G4double strength,
+                          G4bool   strengthIsCurrent,
+                          G4double radiusIn);
+  /// Alternative constructor for field factory that uses "field" (i.e. B) strength
+  /// from the magnet strength instance.
+  BDSFieldMagSolenoidLoop(BDSMagnetStrength const* strength,
+                          G4double radiusIn);
 
-  virtual ~BDSFieldMagSolenoidSheet(){;}
+  virtual ~BDSFieldMagSolenoidLoop(){;}
 
   /// Calculate the field value.
   virtual G4ThreeVector GetField(const G4ThreeVector& position,
@@ -76,12 +74,10 @@ private:
   G4double OnAxisBz(G4double zp, G4double zm) const;
   
   G4double a;
-  G4double halfLength;
   G4double B0;
   G4double I;
   G4double spatialLimit;
-  G4double normalisation;
-  G4double coilTolerance;
+  G4double mu0OverPiTimesITimesA;
 };
 
 #endif

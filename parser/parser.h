@@ -31,6 +31,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "blmplacement.h"
 #include "cavitymodel.h"
 #include "newcolour.h"
+#include "coolingchannel.h"
 #include "crystal.h"
 #include "element.h"
 #include "elementtype.h"
@@ -233,6 +234,7 @@ namespace GMAD
     FastList<Atom>   atom_list;
     FastList<NewColour> colour_list;
     FastList<Crystal> crystal_list;
+    FastList<CoolingChannel> coolingchannel_list;
     FastList<Field>  field_list;
     FastList<Material> material_list;
     FastList<Query> query_list;
@@ -268,6 +270,7 @@ namespace GMAD
     Atom atom;
     NewColour colour;
     Crystal crystal;
+    CoolingChannel coolingchannel;
     Field field;
     Material material;
     PhysicsBiasing xsecbias;
@@ -286,10 +289,10 @@ namespace GMAD
     
     /// Find object by name in list
     template <class C>
-      bool FindAndExtend(const std::string& objectName);
+    bool FindAndExtend(const std::string& objectName);
     /// Extend object with maps
     template <class C>
-      void ExtendObject(C& object);
+    void ExtendObject(C& object);
 
     /// Map for options of type double for extending objects
     std::map<std::string, double> extendedNumbers;

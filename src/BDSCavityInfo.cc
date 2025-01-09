@@ -46,5 +46,9 @@ BDSCavityInfo::BDSCavityInfo(BDSCavityType cavityTypeIn,
   equatorVerticalAxis(equatorVerticalAxisIn),
   irisHorizontalAxis(irisHorizontalAxisIn),
   irisVerticalAxis(irisVerticalAxisIn),
-  tangentLineAngle(tangentLineAngleIn)
+  tangentLineAngle(tangentLineAngleIn),
+  inputWindowMaterial(nullptr),
+  inputWindowThickness(0),
+  outputWindowMaterial(nullptr),
+  outputWindowThickness(0)
 {;}

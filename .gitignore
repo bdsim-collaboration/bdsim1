@@ -71,3 +71,8 @@ examples/features/options/*.dat
 
 .build*
 .install*
+
+# Development environment #
+###########################
+.devcontainer/
+.vscode/

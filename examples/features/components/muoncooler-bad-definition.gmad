@@ -1,0 +1,13 @@
+mc1: muoncooler, l=3.0*m, horizontalWidth=2.2*m, coolingDefinition="bananas";
+! no such definition - should fail
+
+lat: line=(mc1);
+use, lat;
+
+option, checkOverlaps=1,
+        collimatorsAreInfiniteAbsorbers=1,
+        stopSecondaries=1,
+        physicsList="qgsp_bic em muon",
+        ngenerate=1;
+
+beam, particle="mu+", momentum=200.0*MeV;

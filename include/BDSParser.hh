@@ -19,6 +19,7 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef BDSPARSER_H
 #define BDSPARSER_H
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -98,6 +99,8 @@ public:
   inline std::vector<GMAD::CavityModel> GetCavityModels() const {return cavitymodel_list.getVector();}
   inline std::vector<GMAD::NewColour> GetColours() const {return colour_list.getVector();}
   inline std::vector<GMAD::Crystal> GetCrystals() const {return crystal_list.getVector();}
+  inline std::vector<GMAD::CoolingChannel> GetCoolingChannels() const {return coolingchannel_list.getVector();}
+  inline std::map<std::string, GMAD::CoolingChannel> GetCoolingChannelMap() const {return coolingchannel_list.getMap();}
   inline std::vector<GMAD::Field> GetFields() const {return field_list.getVector();}
   inline std::vector<GMAD::Material> GetMaterials() const {return material_list.getVector();}
   inline std::vector<GMAD::Placement> GetPlacements() const {return placement_list.getVector();}
@@ -110,6 +113,10 @@ public:
   inline std::vector<GMAD::Modulator> GetModulators() const {return modulator_list.getVector();}
   inline std::vector<GMAD::Aperture> GetApertures() const {return aperture_list.getVector();}
   /// @}
+
+  /// Return a cooling channel object by name. Throws an exception if it doesn't exist.
+  GMAD::CoolingChannel GetCoolingChannel(const std::string& objectName);
+
   
 protected:
   /// Constructor from filename.

@@ -94,10 +94,10 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 %token <ival> SOLENOID RCOL JCOL ECOL LINE LASER TRANSFORM3D MUONSPOILER MUSPOILER
 %token <ival> SHIELD DEGRADER GAP CRYSTALCOL WIRESCANNER
 %token <ival> VKICKER HKICKER KICKER TKICKER THINRMATRIX PARALLELTRANSPORTER
-%token <ival> RMATRIX UNDULATOR USERCOMPONENT DUMP CT TARGET RFX RFY
+%token <ival> RMATRIX UNDULATOR USERCOMPONENT DUMP CT TARGET RFX RFY MUONCOOLER
 %token ALL ATOM MATERIAL PERIOD XSECBIAS REGION PLACEMENT NEWCOLOUR SAMPLERPLACEMENT
 %token SCORER SCORERMESH BLM MODULATOR
-%token CRYSTAL FIELD CAVITYMODEL QUERY TUNNEL APERTURE
+%token CRYSTAL FIELD CAVITYMODEL QUERY TUNNEL APERTURE COOLINGCHANNEL
 %token BEAM OPTION PRINT RANGE STOP USE SAMPLE CSAMPLE
 %token IF ELSE BEGN END LE GE NE EQ FOR
 
@@ -307,6 +307,14 @@ decl : VARIABLE ':' component_with_params
              Parser::Instance()->Add<Crystal>(true, "crystal");
          }
      }
+      | VARIABLE ':' coolingchannel
+     {
+       if(execute) {
+	 if(ECHO_GRAMMAR) std::cout << "decl -> VARIABLE " << *($1) << " : coolingchannel" << std::endl;
+             Parser::Instance()->SetValue<CoolingChannel>("name", *($1));
+             Parser::Instance()->Add<CoolingChannel>(true, "coolingchannel");
+         }
+     }
      | VARIABLE ':' field
      {
          if(execute) {
@@ -402,6 +410,7 @@ component : DRIFT       {$$=static_cast<int>(ElementType::_DRIFT);}
           | UNDULATOR   {$$=static_cast<int>(ElementType::_UNDULATOR);}
           | USERCOMPONENT {$$=static_cast<int>(ElementType::_USERCOMPONENT);}
           | DUMP        {$$=static_cast<int>(ElementType::_DUMP);}
+          | MUONCOOLER  {$$=static_cast<int>(ElementType::_MUONCOOLER);}
           | CT          {$$=static_cast<int>(ElementType::_CT);}
           | TARGET      {$$=static_cast<int>(ElementType::_TARGET);}
           | RFX         {$$=static_cast<int>(ElementType::_RFX);}
@@ -413,6 +422,7 @@ region      : REGION      ',' region_options
 placement   : PLACEMENT   ',' placement_options
 newcolour   : NEWCOLOUR   ',' colour_options
 crystal     : CRYSTAL     ',' crystal_options
+coolingchannel : COOLINGCHANNEL ',' coolingchannel_options
 field       : FIELD       ',' field_options
 cavitymodel : CAVITYMODEL ',' cavitymodel_options
 query       : QUERY       ',' query_options
@@ -432,6 +442,7 @@ object_noparams : MATERIAL
                 | PLACEMENT
                 | NEWCOLOUR
                 | CRYSTAL
+                | COOLINGCHANNEL
                 | FIELD
                 | CAVITYMODEL
                 | QUERY
@@ -927,6 +938,14 @@ command : STOP         { if(execute) Parser::Instance()->quit(); }
               Parser::Instance()->Add<Crystal>(true, "crystal");
             }
         }
+        | COOLINGCHANNEL ',' coolingchannel_options // coolingchannel
+        {
+          if(execute)
+            {
+              if(ECHO_GRAMMAR) std::cout << "command -> COOLINGCHANNEL" << std::endl;
+              Parser::Instance()->Add<CoolingChannel>(true, "coolingchannel");
+            }
+        }
         | FIELD ',' field_options // field
         {
           if(execute)
@@ -1169,6 +1188,16 @@ crystal_options : paramassign '=' aexpr crystal_options_extend
                 { if(execute) Parser::Instance()->SetValue<Crystal>((*$1),$3);}
               | paramassign '=' string crystal_options_extend
                 { if(execute) Parser::Instance()->SetValue<Crystal>((*$1),*$3);}
+
+coolingchannel_options_extend : /* nothing */
+                     | ',' coolingchannel_options
+
+coolingchannel_options : paramassign '=' aexpr coolingchannel_options_extend
+                { if(execute) Parser::Instance()->SetValue<CoolingChannel>((*$1),$3);}
+              | paramassign '=' string coolingchannel_options_extend
+                { if(execute) Parser::Instance()->SetValue<CoolingChannel>((*$1),*$3);}
+              | paramassign '=' vecexpr coolingchannel_options_extend
+	        { if(execute) Parser::Instance()->SetValue<CoolingChannel>(*($1),$3);}
 
 field_options_extend : /* nothing */
                      | ',' field_options

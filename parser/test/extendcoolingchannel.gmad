@@ -1,0 +1,3 @@
+include coolingchannel.gmad
+
+extracool: nRFCavities=3;

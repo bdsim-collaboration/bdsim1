@@ -21,7 +21,9 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSParser.hh"
 #include "BDSUtilities.hh"
 
+#include <map>
 #include <string>
+#include <vector>
 
 BDSParser* BDSParser::instance = nullptr;
 
@@ -89,7 +91,7 @@ void BDSParser::CheckOptions()
   if (options.lengthSafety < 1e-15)
     { // protect against poor lengthSafety choices that would cause potential overlaps
       std::cerr << "Dangerously low \"lengthSafety\" value of: " << options.lengthSafety
-		<< " m that will result in potential geometry overlaps!" << std::endl;
+                << " m that will result in potential geometry overlaps!" << std::endl;
       std::cerr << "This affects all geometry construction and should be carefully chosen!!!" << std::endl;
       std::cerr << "The default value is 1 pm" << std::endl;
       exit(1);
@@ -103,4 +105,14 @@ void BDSParser::CheckOptions()
 
   if (BDS::IsFinite(options.beamlineS) && beam.S0 == 0) 
     {beam.S0 = beam.S0 + options.beamlineS;}
+}
+
+GMAD::CoolingChannel BDSParser::GetCoolingChannel(const std::string& objectName)
+{
+  auto m = coolingchannel_list.getMap();
+  auto search = m.find(objectName);
+  if (search != m.end())
+    {return search->second;}
+  else
+    {throw BDSException(__METHOD_NAME__, "no such coolingDefinition \"" + objectName + "\"");}
 }

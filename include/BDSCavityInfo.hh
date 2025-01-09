@@ -20,7 +20,8 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #define BDSCAVITYINFO_H
 
 #include "BDSCavityType.hh"
-#include "globals.hh"         // geant4 types / globals
+
+#include "G4Types.hh"
 
 #include "CLHEP/Units/SystemOfUnits.h"
 
@@ -39,6 +40,10 @@ class G4Material;
  * This class does not specify the vacuum material as ideally we can specify the
  * the 'vacuum' pressure and composition throughout the machine without redefining
  * a cavity model.
+ *
+ * Optional 'windows' that fit the input / output apertures are included as member
+ * variables. Only if the material is not nullptr will they be built and then the
+ * corresponding thickness variable needs to be > 0.
  * 
  * @author Laurie Nevay
  */
@@ -46,6 +51,7 @@ class G4Material;
 class BDSCavityInfo
 {
 public:
+  /// No default constructor.
   BDSCavityInfo() = delete;
   /// Constructor to assign all members at once. Default values are based
   /// on those for SRF cavity.
@@ -62,7 +68,7 @@ public:
 		G4double      irisHorizontalAxisIn     = 12*CLHEP::mm,
 		G4double      irisVerticalAxisIn       = 19*CLHEP::mm,
 		G4double      tangentLineAngleIn       = 13.3*CLHEP::degree);
-
+  ~BDSCavityInfo() = default;
   
   BDSCavityType cavityType; ///< Cavity type.  
   G4Material* material;     ///< Material.
@@ -81,6 +87,12 @@ public:
   G4double irisHorizontalAxis;    ///< Iris ellipse horizontal semi-axis.
   G4double irisVerticalAxis;      ///< Iris ellipse vertical semi-axis.
   G4double tangentLineAngle;      ///< Tangent angle.
+
+  /// If the material is not nullptr then the window is built.
+  G4Material* inputWindowMaterial;
+  G4double    inputWindowThickness;
+  G4Material* outputWindowMaterial;
+  G4double    outputWindowThickness;
 };
 
 #endif

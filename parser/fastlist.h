@@ -88,6 +88,9 @@ namespace GMAD
     /// Get a vector version of this list.
     std::vector<T> getVector() const {return std::vector<T>(begin(), end());}
 
+    /// Get a map of name to object of this list.
+    std::map<std::string, T> getMap() const;
+
     ///@{ lookup method, returns iterator of list pointing to element with name
     /// second argument is instance number, default first instance
     /// both const and non-const version
@@ -239,6 +242,15 @@ namespace GMAD
   template <typename T>
     typename FastList<T>::FastMapConstIteratorPair FastList<T>::equal_range(std::string name) const {
     return itsMap.equal_range(name);
+  }
+
+  template <typename T>
+  std::map<std::string, T> FastList<T>::getMap() const
+  {
+    std::map<std::string, T> result;
+    for (auto kv: itsMap)
+      {result[kv.first] = *(kv.second);}
+    return result;
   }
 
   template <typename T>

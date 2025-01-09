@@ -34,10 +34,12 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSFieldEMGlobal.hh"
 #include "BDSFieldEMGlobalPlacement.hh"
 #include "BDSFieldEMInterpolated.hh"
+#include "BDSFieldEMMuonCooler.hh"
 #include "BDSFieldEMRFCavity.hh"
 #include "BDSFieldEMZero.hh"
 #include "BDSFieldFactory.hh"
 #include "BDSFieldInfo.hh"
+#include "BDSFieldInfoExtra.hh"
 #include "BDSFieldLoader.hh"
 #include "BDSFieldMag.hh"
 #include "BDSFieldMagDecapole.hh"
@@ -58,7 +60,9 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "BDSFieldMagOctupole.hh"
 #include "BDSFieldMagQuadrupole.hh"
 #include "BDSFieldMagSextupole.hh"
+#include "BDSFieldMagSolenoidBlock.hh"
 #include "BDSFieldMagSolenoidSheet.hh"
+#include "BDSFieldMagSolenoidLoop.hh"
 #include "BDSFieldMagSkewOwn.hh"
 #include "BDSFieldMagUndulator.hh"
 #include "BDSFieldMagZero.hh"
@@ -612,6 +616,10 @@ BDSFieldMag* BDSFieldFactory::CreateFieldMagRaw(const BDSFieldInfo&      info,
     case BDSFieldType::dipole:
     case BDSFieldType::dipole3d:
       {field = new BDSFieldMagDipole(strength); break;}
+    case BDSFieldType::solenoidblock:
+      {field = new BDSFieldMagSolenoidBlock(strength, poleTipRadius); break;}
+    case BDSFieldType::solenoidloop:
+      {field = new BDSFieldMagSolenoidLoop(strength, poleTipRadius); break;}
     case BDSFieldType::solenoidsheet:
       {field = new BDSFieldMagSolenoidSheet(strength, poleTipRadius); break;}
     case BDSFieldType::quadrupole:
@@ -863,6 +871,7 @@ BDSFieldMag* BDSFieldFactory::CreateFieldMagRaw(const BDSFieldInfo&      info,
 
 BDSFieldObjects* BDSFieldFactory::CreateFieldEM(const BDSFieldInfo& info)
 {
+  G4double brho = info.BRho();
   BDSFieldEM* field = nullptr;
   switch (info.FieldType().underlying())
     {
@@ -881,6 +890,8 @@ BDSFieldObjects* BDSFieldFactory::CreateFieldEM(const BDSFieldInfo& info)
       }
     case BDSFieldType::ebfieldzero:
       {field = new BDSFieldEMZero(); break;}
+    case BDSFieldType::muoncooler:
+      {field = CreateMuonCoolerField(info, brho); break;}
     default:
       return nullptr;
       break;
@@ -1281,6 +1292,17 @@ G4double BDSFieldFactory::GetOuterScaling(const BDSMagnetStrength* st) const
   return result;
 }
 
+BDSFieldEM* BDSFieldFactory::CreateMuonCoolerField(const BDSFieldInfo& info,
+                                                   G4double brho) const
+{
+  BDSFieldInfoExtra* extraInfo = info.ExtraInfo();
+  BDSFieldInfoExtraMuonCooler* mcExtraInfo = dynamic_cast<BDSFieldInfoExtraMuonCooler*>(extraInfo);
+  if (!mcExtraInfo) // shouldn't happen, but just for safety
+    {throw BDSException(__METHOD_NAME__, "no muon cooler extra definitions for field definition: " + info.NameOfParserDefinition());}
+  
+  BDSFieldEM* result = new BDSFieldEMMuonCooler(mcExtraInfo, brho);
+  return result;
+}
 BDSModulator* BDSFieldFactory::CreateModulator(const BDSModulatorInfo* modulatorRecipe,
                                                const BDSFieldInfo& info) const
 {

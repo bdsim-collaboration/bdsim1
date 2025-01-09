@@ -35,6 +35,7 @@ namespace GMAD
 }
 
 class BDSFieldE;
+class BDSFieldEM;
 class BDSFieldInfo;
 class BDSFieldMag;
 class BDSFieldObjects;
@@ -165,6 +166,10 @@ private:
   /// Create the necessary modulator.
   BDSModulator* CreateModulator(const BDSModulatorInfo* modulatorRecipe,
                                 const BDSFieldInfo& info) const;
+  
+  /// Create a composite muon cooler field EM field.
+  BDSFieldEM* CreateMuonCoolerField(const BDSFieldInfo& info,
+                                    G4double brho) const;
   
   /// Private default constructor as singleton class.
   BDSFieldFactory();

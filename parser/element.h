@@ -235,6 +235,9 @@ namespace GMAD
     std::string crystalBoth;
     double      crystalAngleYAxisLeft;
     double      crystalAngleYAxisRight;
+    
+    /// For muon cooler
+    std::string coolingDefinition;
   
     /// Whether the angle was set. Unique as we may technically have 0 angle but a finite
     /// field. This allows us to distinguish later on.

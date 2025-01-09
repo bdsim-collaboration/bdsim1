@@ -74,6 +74,7 @@ namespace GMAD {
   template void Parser::Add<Scorer, FastList<Scorer> >(bool unique, const std::string& className);
   template void Parser::Add<Tunnel, FastList<Tunnel> >(bool unique, const std::string& className);
   template void Parser::Add<Crystal, FastList<Crystal> >(bool unique, const std::string& className);
+  template void Parser::Add<CoolingChannel, FastList<CoolingChannel> >(bool unique, const std::string& className);
   template void Parser::Add<Aperture, FastList<Aperture> >(bool unique, const std::string& className);
   template void Parser::Add<Material, FastList<Material> >(bool unique, const std::string& className);
   template void Parser::Add<NewColour, FastList<NewColour> >(bool unique, const std::string& className);
@@ -740,7 +741,7 @@ void Parser::Overwrite(const std::string& objectName)
   // find object and set values
 
   // possible object types are:
-  // element, atom, colour, crystal, field, material, physicsbiasing, placement,
+  // element, atom, colour, crystal, coolingchannel, field, material, physicsbiasing, placement,
   // query, region, tunnel, cavitymodel, samplerplacement, aperture, scorer, scorermesh, blm
   bool extended = false;
   auto element_it = element_list.find(objectName);
@@ -763,6 +764,7 @@ void Parser::Overwrite(const std::string& objectName)
     if (      (extended = FindAndExtend<Atom>       (objectName)) ) {}
     else if ( (extended = FindAndExtend<NewColour>  (objectName)) ) {}
     else if ( (extended = FindAndExtend<Crystal>    (objectName)) ) {}
+    else if ( (extended = FindAndExtend<CoolingChannel> (objectName)) ) {}
     else if ( (extended = FindAndExtend<Field>      (objectName)) ) {}
     else if ( (extended = FindAndExtend<Material>   (objectName)) ) {}
     else if ( (extended = FindAndExtend<Placement>  (objectName)) ) {}
@@ -854,6 +856,9 @@ bool Parser::TryPrintingObject(const std::string& objectName) const
   auto searchCrystal = std::find_if(crystal_list.begin(), crystal_list.end(), [&on](const Crystal& obj) {return obj.name == on;});
   if (searchCrystal != crystal_list.end())
     {searchCrystal->print(); return true;}
+  auto searchCoolingChannel = std::find_if(coolingchannel_list.begin(), coolingchannel_list.end(), [&on](const CoolingChannel& obj) {return obj.name == on;});
+  if (searchCoolingChannel != coolingchannel_list.end())
+    {searchCoolingChannel->print(); return true;}
   auto searchField = std::find_if(field_list.begin(), field_list.end(), [&on](const Field& obj) {return obj.name == on;});
   if (searchField != field_list.end())
     {searchField->print(); return true;}
@@ -934,6 +939,12 @@ namespace GMAD {
 
   template<>
   FastList<Crystal>& Parser::GetList<Crystal>(){return crystal_list;}
+    
+  template<>
+  CoolingChannel& Parser::GetGlobal(){return coolingchannel;}
+    
+  template<>
+  FastList<CoolingChannel>& Parser::GetList<CoolingChannel>(){return coolingchannel_list;}
   
   template<>
   Field& Parser::GetGlobal(){return field;}

@@ -259,6 +259,8 @@ void Element::PublishMembers()
   publish("crystalBoth",            &Element::crystalBoth);
   publish("crystalAngleYAxisLeft" , &Element::crystalAngleYAxisLeft);
   publish("crystalAngleYAxisRight", &Element::crystalAngleYAxisRight);
+
+  publish("coolingDefinition",      &Element::coolingDefinition);
 }
 
 std::string Element::getPublishedName(const std::string& nameIn) const
@@ -436,9 +438,15 @@ void Element::print(int ident) const
         std::cout << "scaling = " << scaling << std::endl;
         if (scalingFieldOuter != 1)
           {std::cout << "scalingFieldOuter = " << scalingFieldOuter << std::endl;}
-            std::cout << "fieldModulator = \"" << fieldModulator << "\"" << std::endl;
+        std::cout << "fieldModulator = \"" << fieldModulator << "\"" << std::endl;
         break;
       }
+    case ElementType::_MUONCOOLER:
+      {
+        std::cout << "coolingDefinition= " << coolingDefinition << std::endl;
+        break;
+      }
+
     default:
       {break;}
     }
@@ -631,6 +639,8 @@ void Element::flush()
   crystalBoth            = "";
   crystalAngleYAxisLeft  = 0;
   crystalAngleYAxisRight = 0;
+
+  coolingDefinition = "";
   
   angleSet = false;
   scalingFieldOuterSet = false;
