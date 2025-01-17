@@ -86,7 +86,42 @@ const std::vector<G4String> BDSMagnetStrength::keys = {
   "rmat41",
   "rmat42",
   "rmat43",
-  "rmat44"
+  "rmat44",
+  "cavity_efield", /* TODO not needed */
+  "cavity_travelling", /* TODO not needed */
+  "cavity_radius", /* TODO not needed */
+  "cavity_length", /* TODO not needed */
+  "cavity_m", /* TODO not needed */
+  "cavity_n", /* TODO not needed */
+  "cavity_p", /* TODO not needed */
+  "cavity_tphase", /* TODO not needed */
+  "cavity_zphase", /* TODO not needed */
+  "cavity_cell_length",
+  "cavity_cell_voltage",
+  "cavity_cell_number",
+  "cavity_cell_phase_advance",
+  "cavity_phase",
+  "cavity_b0",
+  "cavity_bp1",
+  "cavity_bp2",
+  "cavity_bp3",
+  "cavity_bp4",
+  "cavity_bp5",
+  "cavity_bp6",
+  "cavity_bp7",
+  "cavity_bp8",
+  "cavity_bp9",
+  "cavity_bp10",
+  "cavity_bm1",
+  "cavity_bm2",
+  "cavity_bm3",
+  "cavity_bm4",
+  "cavity_bm5",
+  "cavity_bm6",
+  "cavity_bm7",
+  "cavity_bm8",
+  "cavity_bm9",
+  "cavity_bm10",
 };
 
 const std::map<G4String, BDSMagnetStrength::unitsFactors> BDSMagnetStrength::unitsFactorsMap = {
@@ -164,7 +199,43 @@ const std::map<G4String, BDSMagnetStrength::unitsFactors> BDSMagnetStrength::uni
     {"rmat41"        , {"",    1.0}},
     {"rmat42"        , {"",    1.0}},
     {"rmat43"        , {"",    1.0}},
-    {"rmat44"        , {"",    1.0}}
+    {"rmat44"        , {"",    1.0}},
+    {"cavity_efield" , {"",    1.0}},
+    {"cavity_travelling", {"",    1.0}},
+    {"cavity_radius"    , {"",    CLHEP::m}},
+    {"cavity_length"    , {"",    CLHEP::m}},
+    {"cavity_m"      , {"",    1.0}},
+    {"cavity_n"     , {"",    1.0}},
+    {"cavity_p"     , {"",    1.0}},
+    {"cavity_tphase", {"",    1.0}},
+    {"cavity_zphase", {"",    1.0}},
+    {"cavity_zphase", {"",    1.0}},
+    {"cavity_cell_length", {"",    1.0}},
+    {"cavity_cell_voltage", {"",    1.0}},
+    {"cavity_cell_number", {"",    1.0}},
+    {"cavity_cell_phase_advance", {"",    1.0}},
+    {"cavity_phase", {"",    1.0}},
+    {"cavity_b0", {"", 0.0}},
+    {"cavity_bp1", {"", 0.0}},
+    {"cavity_bp2", {"", 0.0}},
+    {"cavity_bp3", {"", 0.0}},
+    {"cavity_bp4", {"", 0.0}},
+    {"cavity_bp5", {"", 0.0}},
+    {"cavity_bp6", {"", 0.0}},
+    {"cavity_bp7", {"", 0.0}},
+    {"cavity_bp8", {"", 0.0}},
+    {"cavity_bp9", {"", 0.0}},
+    {"cavity_bp10", {"", 0.0}},
+    {"cavity_bm1", {"", 0.0}},
+    {"cavity_bm2", {"", 0.0}},
+    {"cavity_bm3", {"", 0.0}},
+    {"cavity_bm4", {"", 0.0}},
+    {"cavity_bm5", {"", 0.0}},
+    {"cavity_bm6", {"", 0.0}},
+    {"cavity_bm7", {"", 0.0}},
+    {"cavity_bm8", {"", 0.0}},
+    {"cavity_bm9", {"", 0.0}},
+    {"cavity_bm10", {"", 0.0}},
 };
 
 const std::vector<G4String> BDSMagnetStrength::normalComponentKeys = {

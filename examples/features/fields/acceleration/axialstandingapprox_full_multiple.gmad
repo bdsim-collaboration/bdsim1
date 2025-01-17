@@ -1,0 +1,31 @@
+approx: field, type="axialstandingapprox", fieldParameters="cavity_cell_length=0.18700096 cavity_cell_voltage=-4.01 cavity_cell_number=5 cavity_cell_phase_advance=3.141592653589793 cavity_phase=0";
+
+d1 : drift, l=1.0*mm, aper1=0.1*m;
+rf1 : rfcavity, l=5*0.18700096*m, fieldVacuum="approx";
+d2 : drift, l=1.0*mm, aper1=0.1*m;
+
+l1: line = (d1,rf1,d1,rf1,d1,rf1,d1,rf1,d1,rf1,d2);
+use, l1;
+
+beam, particle="electron",
+      energy = 7 * MeV,
+      X0=0.0*m,
+      Xp0=0.0,
+      Y0=0.0*m,
+      Yp0=0.0,
+      alfx=-0.0209,
+      alfy=-0.0169,
+      betx=4.146*m,
+      bety=4.1362*m,
+      dispx=0.0*m,
+      dispxp=0.0,
+      dispy=0.0*m,
+      dispyp=0.0,
+      distrType="gausstwiss",
+      emitx=4.379991429e-7*m,
+      emity=4.379991429e-7*m,
+      sigmaE=0.0001;
+
+sample, all;
+
+option, includeFringeFieldsCavities=0;

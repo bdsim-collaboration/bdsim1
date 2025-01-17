@@ -32,15 +32,22 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 template<>
 std::map<BDSCavityFieldType, std::string>* BDSCavityFieldType::dictionary =
   new std::map<BDSCavityFieldType, std::string> ({
-  {BDSCavityFieldType::constantinz, "constantinz"},
-  {BDSCavityFieldType::pillbox,     "pillbox"}
+  {BDSCavityFieldType::constantinz,        "constantinz"},
+  {BDSCavityFieldType::pillbox,            "pillbox"},
+  {BDSCavityFieldType::transversemagnetic, "transversemagnetic"},
+  {BDSCavityFieldType::axialstandingapprox,"axialstandingapprox"},
+  {BDSCavityFieldType::axialfloquetapprox, "axialfloquetapprox"}
+
 });
 
 BDSCavityFieldType BDS::DetermineCavityFieldType(G4String cavityFieldType)
 {
   std::map<G4String, BDSCavityFieldType> types;
-  types["constantinz"]   = BDSCavityFieldType::constantinz;
-  types["pillbox"]       = BDSCavityFieldType::pillbox;
+  types["constantinz"]         = BDSCavityFieldType::constantinz;
+  types["pillbox"]             = BDSCavityFieldType::pillbox;
+  types["transversemagnetic"]  = BDSCavityFieldType ::transversemagnetic;
+  types["axialstandingapprox"] = BDSCavityFieldType ::axialstandingapprox;
+  types["axialfloquetapprox"]  = BDSCavityFieldType ::axialfloquetapprox;
 
   cavityFieldType = BDS::LowerCase(cavityFieldType);
 
@@ -69,6 +76,12 @@ BDSFieldType BDS::FieldTypeFromCavityFieldType(BDSCavityFieldType cavityFieldTyp
       {result = BDSFieldType::rfconstantinz; break;}
     case BDSCavityFieldType::pillbox:
       {result = BDSFieldType::rfpillbox; break;}
+    case BDSCavityFieldType::transversemagnetic:
+      {result = BDSFieldType::transversemagnetic; break;}
+    case BDSCavityFieldType::axialstandingapprox:
+      {result = BDSFieldType::axialstandingapprox; break;}
+    case BDSCavityFieldType::axialfloquetapprox:
+      {result = BDSFieldType::axialfloquetapprox; break;}
     }
   return result;
 }

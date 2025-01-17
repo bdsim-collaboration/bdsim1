@@ -626,6 +626,15 @@ BDSAcceleratorComponent* BDSComponentFactory::CreateRF(RFFieldDirection directio
   auto modulator = ModulatorDefinition(element);
   vacuumField->SetModulatorInfo(modulator); // works even if none
 
+  auto defaultUL = BDSGlobalConstants::Instance()->DefaultUserLimits();
+  G4double stepFraction  = 0.025;
+  G4double period = 1. / (element->frequency*CLHEP::hertz);
+  // choose the smallest length scale based on the length of the component of the distance
+  // travelled in one period - so improved for high frequency fields
+  G4double limit = 1;
+  auto ul = BDS::CreateUserLimits(defaultUL, limit, 1.0);
+  vacuumField->SetUserLimits(ul);
+
   // limit step length in field - crucial to this component
   // to get the motion correct this has to be less than one oscillation.
   // Don't set if frequency is zero as the field will have no oscillation, so we can integrate
@@ -2594,7 +2603,7 @@ BDSCavityInfo* BDSComponentFactory::PrepareCavityModelInfoForElement(Element con
   // frequency can be zero in which case only build 1 cell
   if (BDS::IsFinite(frequency))
     {
-      cellLength = 2*CLHEP::c_light / frequency; // half wavelength
+      cellLength = CLHEP::c_light / (2*frequency); // half wavelength
       G4double nCavities  = length / cellLength;
       nCells = G4int(std::floor(nCavities));
     }
@@ -2746,6 +2755,30 @@ BDSMagnetStrength* BDSComponentFactory::PrepareCavityStrength(Element const*    
       {(*st)["ex"] = 1.0; break;}
     case BDSFieldType::rfconstantiny:
       {(*st)["ey"] = 1.0; break;}
+    case BDSFieldType::transversemagnetic:
+      {
+        BDSFieldInfo* field = BDSFieldFactory::Instance()->GetDefinition(element->fieldVacuum);
+        auto magStrength = field->MagnetStrength();
+        ((*st))["cavity_efield"] = (*magStrength)["cavity_efield"];
+        ((*st))["cavity_m"] = (*magStrength)["cavity_m"];
+        ((*st))["cavity_n"] = (*magStrength)["cavity_n"];
+        ((*st))["cavity_p"] = (*magStrength)["cavity_p"];
+        ((*st))["cavity_zphase"] = (*magStrength)["cavity_zphase"];
+        ((*st))["cavity_tphase"] = (*magStrength)["cavity_tphase"];
+        ((*st))["cavity_radius"] = (*magStrength)["cavity_radius"];
+        ((*st))["cavity_length"] = (*magStrength)["cavity_length"];
+        break;
+      }
+  case BDSFieldType::axialstandingapprox:
+      {
+        BDSFieldInfo* field = BDSFieldFactory::Instance()->GetDefinition(element->fieldVacuum);
+        auto magStrength = field->MagnetStrength();
+        ((*st))["cavity_cell_length"] = (*magStrength)["cavity_cell_length"];
+        ((*st))["cavity_cell_voltage"] = (*magStrength)["cavity_cell_voltage"];
+        ((*st))["cavity_cell_phase_advance"] = (*magStrength)["cavity_cell_phase_advance"];
+        ((*st))["cavity_phase"] = (*magStrength)["cavity_phase"];
+        break;
+      }
     default:
       {(*st)["ez"] = 1.0; break;}
     }
