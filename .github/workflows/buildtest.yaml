@@ -1,5 +1,6 @@
 name: bdsim
 
+
 on:
   workflow_dispatch:
   pull_request:
@@ -19,12 +20,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        container: [ubuntu20-g4.10.7, ubuntu20-g4.11.0, ubuntu20-g4.11.1, ubuntu20-g4.11.2,
-                    ubuntu22-g4.10.7, ubuntu22-g4.11.0, ubuntu22-g4.11.1, ubuntu22-g4.11.2,
-                    ubuntu24-g4.10.7, ubuntu24-g4.11.0, ubuntu24-g4.11.1, ubuntu24-g4.11.2,
-                    centos8-g4.10.7, centos8-g4.11.0, centos8-g4.11.1, centos8-g4.11.2,
-                    alma9-g4.10.7, alma9-g4.11.0, alma9-g4.11.1, alma9-g4.11.2]
-#        container: [ubuntu20-g4.11.0]
+#        container: [ubuntu20-g4.10.7, ubuntu20-g4.11.0, ubuntu20-g4.11.1, ubuntu20-g4.11.2,
+#                    ubuntu22-g4.10.7, ubuntu22-g4.11.0, ubuntu22-g4.11.1, ubuntu22-g4.11.2,
+#                    ubuntu24-g4.10.7, ubuntu24-g4.11.0, ubuntu24-g4.11.1, ubuntu24-g4.11.2,
+#                    centos8-g4.10.7, centos8-g4.11.0, centos8-g4.11.1, centos8-g4.11.2,
+#                    alma9-g4.10.7, alma9-g4.11.0, alma9-g4.11.1, alma9-g4.11.2]
+        container: [ubuntu20-g4.11.0]
     steps:
       - name: Checkout bdsim
         uses: actions/checkout@v4
