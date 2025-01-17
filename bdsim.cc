@@ -31,7 +31,6 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "BDSIMClass.hh"
 #include "BDSException.hh"
-
 #include <iostream>
 
 int main(int argc, char** argv)

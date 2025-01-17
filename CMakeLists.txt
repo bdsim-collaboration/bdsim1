@@ -102,6 +102,9 @@ if(USE_SIXTRACKLINK)
   message(STATUS "SixTrack link ON")
 endif()
 
+# CGAL boolean
+include(cmake/CGALBOOLEAN.cmake)
+
 # Find GEANT4
 include(cmake/Geant4.cmake)
 
@@ -241,6 +244,11 @@ endif()
 if (USE_DICOM)
   target_link_libraries(${BDSIM_LIB_NAME} DCMTK::DCMTK)
   #target_include_directories(${BDSIM_LIB_NAME} SYSTEM PUBLIC ${DCMTK_INCLUDE_DIRS})
+endif()
+if (USE_GEANT4CGALBOOLEAN)
+  target_link_libraries(${BDSIM_LIB_NAME} geant4cgalboolean::g4cgalboolean)
+  get_target_property(var geant4cgalboolean::g4cgalboolean INTERFACE_INCLUDE_DIRECTORIES)
+  message(STATUS "${var}")
 endif()
 
 # link against ROOT

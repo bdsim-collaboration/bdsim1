@@ -37,6 +37,9 @@ along with BDSIM.  If not, see <http://www.gnu.org/licenses/>.
 #include "G4TrackingManager.hh"
 #include "G4Version.hh"
 #include "G4VModularPhysicsList.hh"
+#ifdef USE_GEANT4CGALBOOLEAN
+#include "G4BooleanProcessorCGAL.hh"
+#endif
 
 #include "CLHEP/Units/SystemOfUnits.h"
 
@@ -124,6 +127,11 @@ int BDSIM::Initialise(int argc, char** argv, bool usualPrintOutIn)
 
 int BDSIM::Initialise()
 {
+
+#ifdef USE_GEANT4CGALBOOLEAN
+  G4BooleanSolid::SetExternalBooleanProcessor(new G4BooleanProcessorCGAL());
+#endif
+
   /// Initialize executable command line options reader object
   const BDSExecOptions* execOptions = new BDSExecOptions(argcCache,argvCache);
   if (usualPrintOut)
